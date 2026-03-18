@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Summary - {{DATE}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-accent: #f5f5f5;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --text-muted: #757575;
+            --border-color: #e0e0e0;
+            --section-border: #b0b0b0;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --event-border: #667eea;
+            --event-allday-border: #ffc107;
+            --ooo-bg: #fff3cd;
+            --ooo-border: #ff9800;
+            --table-header: #db4035;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --bg-accent: #252525;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --border-color: #404040;
+            --section-border: #606060;
+            --gradient-start: #5568d3;
+            --gradient-end: #6a4ba2;
+            --event-border: #5568d3;
+            --event-allday-border: #ffb300;
+            --ooo-bg: #3d3520;
+            --ooo-border: #ff9800;
+            --table-header: #c0392b;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-accent);
+            padding: 15px;
+            line-height: 1.4;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: 6px;
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-left h1 {
+            font-size: 1.6em;
+            margin-bottom: 5px;
+        }
+
+        .header-left .date {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-accent);
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            margin-bottom: 15px;
+            border: 1px solid var(--section-border);
+            border-radius: 6px;
+            padding: 10px;
+            background: var(--bg-primary);
+        }
+
+        .section-title {
+            font-size: 1em;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--gradient-start);
+        }
+
+        .calendar-events {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .event {
+            padding: 8px;
+            margin-bottom: 6px;
+            background: var(--bg-primary);
+            border-radius: 3px;
+            border-left: 3px solid var(--event-border);
+            font-size: 0.95em;
+        }
+
+        .event.all-day {
+            border-left-color: var(--event-allday-border);
+        }
+
+        .ooo {
+            padding: 8px;
+            background: var(--ooo-bg);
+            border-radius: 3px;
+            border-left: 3px solid var(--ooo-border);
+            margin-top: 6px;
+            font-size: 0.95em;
+        }
+
+        /* macOS Calendar dark style for calendar section */
+        .calendar-section {
+            background: #2c2c2e !important;
+            border-color: #3a3a3c !important;
+        }
+
+        .calendar-section .section-title {
+            color: #ffffff;
+            border-bottom-color: #ff3b30;
+        }
+
+        .calendar-section .calendar-events {
+            background: #1c1c1e;
+        }
+
+        .calendar-section .event {
+            background: #3a3a3c;
+            color: #ffffff;
+            border-left-color: #ff3b30;
+        }
+
+        .calendar-section .event.all-day {
+            border-left-color: #ff9f0a;
+        }
+
+        .calendar-section .event strong {
+            color: #ff3b30;
+        }
+
+        .calendar-section .ooo {
+            background: #2c2218;
+            border-left-color: #ff9f0a;
+            color: #ffe0b2;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: var(--bg-primary);
+            font-size: 0.9em;
+        }
+
+        .jira-table th {
+            background: #0052cc;
+        }
+
+        .notion-table th {
+            background: #616161;
+        }
+
+        [data-theme="dark"] .jira-table th {
+            background: #0041a8;
+        }
+
+        [data-theme="dark"] .notion-table th {
+            background: #424242;
+        }
+
+        th {
+            background: var(--table-header);
+            color: white;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 6px 8px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:hover {
+            filter: brightness(0.96);
+        }
+
+        /* Todoist row priority backgrounds */
+        .task-row-p1 {
+            background: #ffd6d6;
+        }
+        .task-row-p2 {
+            background: #ffecd0;
+        }
+        .task-row-p3 {
+            background: #d6e8ff;
+        }
+
+        [data-theme="dark"] .task-row-p1 {
+            background: #4a2020;
+        }
+        [data-theme="dark"] .task-row-p2 {
+            background: #4a3020;
+        }
+        [data-theme="dark"] .task-row-p3 {
+            background: #1e2f45;
+        }
+
+        .priority-p1 {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .priority-p2 {
+            color: #f57c00;
+            font-weight: bold;
+        }
+
+        .priority-p3 {
+            color: #1976d2;
+        }
+
+        .priority-p4 {
+            color: var(--text-muted);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.8em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .status-in-progress {
+            background: #fef9ef;
+            color: #d9a443;
+        }
+
+        [data-theme="dark"] .status-in-progress {
+            background: #3d2f10;
+            color: #f0c060;
+        }
+
+        .status-monitoring {
+            background: #dce9f8;
+            color: #2e7cb8;
+        }
+
+        [data-theme="dark"] .status-monitoring {
+            background: #1a2d3d;
+            color: #64b5f6;
+        }
+
+        .status-blocked {
+            background: #ffe2dd;
+            color: #eb4c3b;
+        }
+
+        [data-theme="dark"] .status-blocked {
+            background: #3a1a18;
+            color: #ff7066;
+        }
+
+        .status-backlog {
+            background: #f1f1ef;
+            color: #6b6b6b;
+        }
+
+        [data-theme="dark"] .status-backlog {
+            background: #2f2f2f;
+            color: #9b9b9b;
+        }
+
+        .status-merging {
+            background: #ecf7f5;
+            color: #2e8074;
+        }
+
+        [data-theme="dark"] .status-merging {
+            background: #1a2f2c;
+            color: #4dab9a;
+        }
+
+        .status-review-testing {
+            background: #f3eff8;
+            color: #7048b0;
+        }
+
+        [data-theme="dark"] .status-review-testing {
+            background: #2a1f3d;
+            color: #9065b0;
+        }
+
+        .status-wait-to-run {
+            background: #f9ede3;
+            color: #b56637;
+        }
+
+        [data-theme="dark"] .status-wait-to-run {
+            background: #3d2510;
+            color: #cf7e50;
+        }
+
+        .jira-priority-medium {
+            color: #f57c00;
+        }
+
+        .jira-priority-low {
+            color: #1976d2;
+        }
+
+        .count-badge {
+            background: var(--gradient-start);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            margin-left: 6px;
+        }
+
+        .subsection {
+            margin-top: 10px;
+        }
+
+        .subsection-title {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--gradient-start);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+
+        .link-btn:hover {
+            background: #5568d3;
+        }
+
+        .no-data {
+            padding: 15px;
+            text-align: center;
+            color: var(--text-muted);
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            font-style: italic;
+        }
+
+        /* Todoist checkbox styles */
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--gradient-start);
+        }
+
+        .task-text {
+            transition: all 0.3s ease;
+        }
+
+        .task-completed .task-text {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+
+        .task-desc {
+            font-size: 0.82em;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .task-desc a {
+            color: var(--gradient-start);
+            text-decoration: none;
+        }
+
+        .task-desc a:hover {
+            text-decoration: underline;
+        }
+
+        /* Two-column layout */
+        .report-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .col-left,
+        .col-right {
+            min-width: 0;
+        }
+
+        /* Todoist (col-right in DOM) renders on the right visually */
+        .col-left  { order: 1; }
+        .col-right { order: 2; }
+
+        @media (max-width: 900px) {
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .header-right {
+                display: none;
+            }
+            .link-btn {
+                display: none;
+            }
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-left">
+                <h1>Today's View</h1>
+                <div class="date">{{DATE_FULL}}</div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-secondary" onclick="toggleDarkMode()">🌓 Theme</button>
+                <button class="btn btn-secondary" onclick="window.print()">🖨️ Print</button>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="report-grid">
+
+                <!-- Left Column: Calendar, Jira, Notion -->
+                <div class="col-left">
+                    <!-- Calendar Section -->
+                    <div class="section calendar-section">
+                        <h2 class="section-title">📅 Calendar</h2>
+                        <div class="calendar-events">
+                            {{CALENDAR_CONTENT}}
+                        </div>
+                    </div>
+
+                    <!-- Jira Section -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            🎯 Jira
+                            <span class="count-badge">{{JIRA_COUNT}}</span>
+                        </h2>
+                        {{JIRA_CONTENT}}
+                    </div>
+
+                    <!-- Notion Work List Section -->
+                    <div class="section notion-section">
+                        <h2 class="section-title">
+                            📝 Notion Work List
+                            <span class="count-badge">{{NOTION_COUNT}}</span>
+                        </h2>
+                        {{NOTION_CONTENT}}
+                    </div>
+                </div>
+
+                <!-- Right Column: Todoist -->
+                <div class="col-right">
+                    <div class="section">
+                        <h2 class="section-title">
+                            ✅ Todoist
+                            <span class="count-badge">{{TODOIST_COUNT}}</span>
+                        </h2>
+                        {{TODOIST_CONTENT}}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode toggle
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Todoist task checkbox handling
+        function toggleTaskComplete(checkbox, taskId) {
+            const row = checkbox.closest('tr');
+            const isChecked = checkbox.checked;
+
+            if (isChecked) {
+                row.classList.add('task-completed');
+            } else {
+                row.classList.remove('task-completed');
+            }
+
+            // Save state to localStorage
+            const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
+            const today = '{{DATE}}';
+
+            if (!completedTasks[today]) {
+                completedTasks[today] = [];
+            }
+
+            if (isChecked) {
+                if (!completedTasks[today].includes(taskId)) {
+                    completedTasks[today].push(taskId);
+                }
+            } else {
+                completedTasks[today] = completedTasks[today].filter(id => id !== taskId);
+            }
+
+            localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+        }
+
+        // Restore completed tasks on page load
+        function restoreCompletedTasks() {
+            const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '{}');
+            const today = '{{DATE}}';
+
+            if (completedTasks[today]) {
+                completedTasks[today].forEach(taskId => {
+                    const checkbox = document.querySelector(`input[data-task-id="${taskId}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        checkbox.closest('tr').classList.add('task-completed');
+                    }
+                });
+            }
+        }
+
+        // Run on page load
+        restoreCompletedTasks();
+    </script>
+</body>
+</html>

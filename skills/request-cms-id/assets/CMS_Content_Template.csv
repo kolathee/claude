@@ -1,0 +1,2 @@
+CMS Group ID/Name,CMS ID,CMS Item Name,ID/Copy Description,Record Status,Lock,English Copy,Placeholder value,A or B,Apply Chinese dicount format?
+,,,Badge displayed on hotel cards on the Smart Search Results page for the Book With Zero Pay feature. Communicates to users that no upfront payment is required â users can book without providing payment information and pay later. Available in India only.,,,Book with {0}0 payment,{0} is the currency symbol (e.g. â$),N/A,No

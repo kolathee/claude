@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Summary - {{DATE}}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-accent: #f5f5f5;
+            --text-primary: #333;
+            --text-secondary: #555;
+            --text-muted: #757575;
+            --border-color: #e0e0e0;
+            --section-border: #b0b0b0;
+            --gradient-start: #667eea;
+            --gradient-end: #764ba2;
+            --link-color: #1a73e8;
+            --shadow: rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --bg-accent: #252525;
+            --text-primary: #e0e0e0;
+            --text-secondary: #b0b0b0;
+            --text-muted: #808080;
+            --border-color: #404040;
+            --section-border: #606060;
+            --gradient-start: #5568d3;
+            --gradient-end: #6a4ba2;
+            --link-color: #6ba3f5;
+            --shadow: rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-accent);
+            padding: 15px;
+            line-height: 1.5;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px var(--shadow);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 { font-size: 1.5em; margin-bottom: 4px; }
+        .header-left .date { font-size: 0.95em; opacity: 0.85; }
+
+        .btn {
+            padding: 7px 14px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85em;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: background 0.2s;
+        }
+        .btn:hover { background: rgba(255,255,255,0.35); }
+
+        .content { padding: 20px 24px; }
+
+        /* Use full-width for single-section rows, default for 2-column pairs */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: start;
+        }
+
+        .category-grid.full-width {
+            grid-template-columns: 1fr;
+        }
+
+        .section {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .section-header {
+            padding: 10px 14px;
+            font-weight: 600;
+            font-size: 0.92em;
+            letter-spacing: 0.03em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header .emoji { font-size: 1.1em; }
+
+        /* Category color coding */
+        .cat-world .section-header        { background: #fff5f5; color: #c0392b; border-bottom-color: #f9c4c0; }
+        .cat-invest .section-header       { background: #f0f9ff; color: #1565c0; border-bottom-color: #b3d9f5; }
+        .cat-economy .section-header      { background: #f0fff4; color: #2e7d32; border-bottom-color: #b2dfdb; }
+        .cat-business .section-header     { background: #fffde7; color: #f57f17; border-bottom-color: #fff176; }
+        .cat-tech .section-header         { background: #f3e5f5; color: #7b1fa2; border-bottom-color: #e1bee7; }
+        .cat-energy .section-header       { background: #fff8e1; color: #e65100; border-bottom-color: #ffe082; }
+        .cat-crypto .section-header       { background: #fff3e0; color: #bf360c; border-bottom-color: #ffcc80; }
+        .cat-commodities .section-header  { background: #fbe9e7; color: #6d4c41; border-bottom-color: #ffccbc; }
+        .cat-realestate .section-header   { background: #e8eaf6; color: #283593; border-bottom-color: #c5cae9; }
+        .cat-healthcare .section-header   { background: #fce4ec; color: #880e4f; border-bottom-color: #f8bbd0; }
+        .cat-manufacturing .section-header{ background: #e0f2f1; color: #004d40; border-bottom-color: #b2dfdb; }
+        .cat-consumer .section-header     { background: #fff9c4; color: #f9a825; border-bottom-color: #fff176; }
+        .cat-automotive .section-header   { background: #eceff1; color: #37474f; border-bottom-color: #cfd8dc; }
+        .cat-thailand .section-header     { background: #e8f5e9; color: #1b5e20; border-bottom-color: #a5d6a7; }
+
+        [data-theme="dark"] .cat-world .section-header        { background: #3d1a1a; color: #ef9a9a; border-bottom-color: #5d2a2a; }
+        [data-theme="dark"] .cat-invest .section-header       { background: #0d1f3c; color: #90caf9; border-bottom-color: #1e3a5f; }
+        [data-theme="dark"] .cat-economy .section-header      { background: #0d2e18; color: #a5d6a7; border-bottom-color: #1b4e2a; }
+        [data-theme="dark"] .cat-business .section-header     { background: #2e2600; color: #ffe082; border-bottom-color: #4e4000; }
+        [data-theme="dark"] .cat-tech .section-header         { background: #2a0d3a; color: #ce93d8; border-bottom-color: #4a1a5f; }
+        [data-theme="dark"] .cat-energy .section-header       { background: #3d1f00; color: #ffcc80; border-bottom-color: #5d3500; }
+        [data-theme="dark"] .cat-crypto .section-header       { background: #3d1a00; color: #ffab91; border-bottom-color: #5d2e00; }
+        [data-theme="dark"] .cat-commodities .section-header  { background: #2a1a14; color: #d7ccc8; border-bottom-color: #4a2e24; }
+        [data-theme="dark"] .cat-realestate .section-header   { background: #0d0f2e; color: #9fa8da; border-bottom-color: #1e1f4f; }
+        [data-theme="dark"] .cat-healthcare .section-header   { background: #2e0d1a; color: #f48fb1; border-bottom-color: #4e1a2e; }
+        [data-theme="dark"] .cat-manufacturing .section-header{ background: #002418; color: #80cbc4; border-bottom-color: #003d28; }
+        [data-theme="dark"] .cat-consumer .section-header     { background: #2e2800; color: #fff59d; border-bottom-color: #4e4400; }
+        [data-theme="dark"] .cat-automotive .section-header   { background: #1a1e20; color: #b0bec5; border-bottom-color: #2e3538; }
+        [data-theme="dark"] .cat-thailand .section-header     { background: #0d2e14; color: #c8e6c9; border-bottom-color: #1a4e24; }
+
+        .news-list { padding: 8px 14px 10px; }
+
+        .news-item {
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.9em;
+            line-height: 1.4;
+        }
+        .news-item:last-child { border-bottom: none; }
+
+        .news-item a {
+            color: var(--link-color);
+            text-decoration: none;
+        }
+        .news-item a:hover { text-decoration: underline; }
+
+        .breaking-badge {
+            display: inline-block;
+            font-size: 0.7em;
+            background: #e53935;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-right: 5px;
+            vertical-align: middle;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .alert-badge {
+            display: inline-block;
+            font-size: 0.7em;
+            background: #f57c00;
+            color: white;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-right: 5px;
+            vertical-align: middle;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+
+        .notice {
+            margin-top: 16px;
+            padding: 10px 14px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+        }
+
+        .count-badge {
+            margin-left: auto;
+            font-size: 0.8em;
+            font-weight: normal;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="header-left">
+            <h1>📰 News Summary</h1>
+            <div class="date">{{DATE_LONG}}</div>
+        </div>
+        <button class="btn" onclick="toggleTheme()">🌙 Dark Mode</button>
+    </div>
+
+    <div class="content">
+
+        <!--
+        LAYOUT GUIDE:
+        - Use class="category-grid full-width" for sections that stand alone (WORLD, ENERGY, THAILAND, etc.)
+        - Use class="category-grid" (2-column) for paired sections (INVESTMENT+ECONOMY, BUSINESS+TECH)
+        - Omit entire category block if no headlines found that day
+        - Available cat-* classes: cat-world, cat-invest, cat-economy, cat-business, cat-tech,
+          cat-energy, cat-crypto, cat-commodities, cat-realestate, cat-healthcare,
+          cat-manufacturing, cat-consumer, cat-automotive, cat-thailand
+        - Badges: <span class="breaking-badge">BREAKING</span> or <span class="alert-badge">ALERT</span>
+        -->
+
+        <!-- WORLD (full-width) -->
+        <div class="category-grid full-width">
+            <div class="section cat-world">
+                <div class="section-header">
+                    <span class="emoji">🌍</span> WORLD
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item">
+                        <span class="breaking-badge">BREAKING</span>
+                        <a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a>
+                    </div>
+                    <!-- more .news-item entries -->
+                </div>
+            </div>
+        </div>
+
+        <!-- INVESTMENT + ECONOMY (2-column) -->
+        <div class="category-grid">
+            <div class="section cat-invest">
+                <div class="section-header">
+                    <span class="emoji">📊</span> INVESTMENT
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+
+            <div class="section cat-economy">
+                <div class="section-header">
+                    <span class="emoji">🏦</span> ECONOMY
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUSINESS + TECH (2-column) -->
+        <div class="category-grid">
+            <div class="section cat-business">
+                <div class="section-header">
+                    <span class="emoji">💼</span> BUSINESS
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+
+            <div class="section cat-tech">
+                <div class="section-header">
+                    <span class="emoji">💻</span> TECH
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENERGY (full-width, omit if no stories) -->
+        <div class="category-grid full-width">
+            <div class="section cat-energy">
+                <div class="section-header">
+                    <span class="emoji">⚡</span> ENERGY
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CRYPTO (full-width, omit if no stories) -->
+        <div class="category-grid full-width">
+            <div class="section cat-crypto">
+                <div class="section-header">
+                    <span class="emoji">🪙</span> CRYPTO
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMODITIES + REAL ESTATE (2-column, omit if no stories) -->
+        <div class="category-grid">
+            <div class="section cat-commodities">
+                <div class="section-header">
+                    <span class="emoji">📦</span> COMMODITIES
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+
+            <div class="section cat-realestate">
+                <div class="section-header">
+                    <span class="emoji">🏠</span> REAL ESTATE
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HEALTHCARE + MANUFACTURING (2-column, omit if no stories) -->
+        <div class="category-grid">
+            <div class="section cat-healthcare">
+                <div class="section-header">
+                    <span class="emoji">🏥</span> HEALTHCARE
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+
+            <div class="section cat-manufacturing">
+                <div class="section-header">
+                    <span class="emoji">🏭</span> MANUFACTURING
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONSUMER + AUTOMOTIVE (2-column, omit if no stories) -->
+        <div class="category-grid">
+            <div class="section cat-consumer">
+                <div class="section-header">
+                    <span class="emoji">🛒</span> CONSUMER
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+
+            <div class="section cat-automotive">
+                <div class="section-header">
+                    <span class="emoji">🚗</span> AUTOMOTIVE
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THAILAND (full-width, always last) -->
+        <div class="category-grid full-width">
+            <div class="section cat-thailand">
+                <div class="section-header">
+                    <span class="emoji">🇹🇭</span> THAILAND
+                    <span class="count-badge">N stories</span>
+                </div>
+                <div class="news-list">
+                    <div class="news-item"><a href="URL" target="_blank">Headline (ภาษาไทยต้นฉบับ)</a></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer notice -->
+        <div class="notice">
+            ✅ All 13 sources fetched successfully &nbsp;·&nbsp; Generated {{DATE}}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const btn = document.querySelector('.btn');
+        if (html.getAttribute('data-theme') === 'dark') {
+            html.removeAttribute('data-theme');
+            btn.textContent = '🌙 Dark Mode';
+        } else {
+            html.setAttribute('data-theme', 'dark');
+            btn.textContent = '☀️ Light Mode';
+        }
+    }
+</script>
+</body>
+</html>

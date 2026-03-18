@@ -1,0 +1,412 @@
+---
+name: work
+description: Create or update Obsidian work pages for tasks in the Agoda Workspace folder. Use when the user says "create a work page", "add a work page", "update work page", "log update to work page", "new task page", "add last update", "add MR to work page", "add Jira to work page", or mentions creating/editing a task page in the current H1/H2 workspace. Also use when formatting or fixing an existing work page to follow the work template. Shorthand triggers — "c" = create work page, "u" = update work page, "f" = reformat work page, "n" = note (create daily note), "e" = end (update today's daily note), "t" = track (add a checkbox item to today's note from a Slack thread or image).
+---
+
+# Work Page Skill
+
+Create or update Obsidian task pages in the Agoda Workspace folder, following the standard Work Template.
+
+## Quarter & Workspace
+
+**Quarter format:** `YYYY H1 or H2` (first or second half of the year).
+
+Compute Quarter from the current date:
+- Jan–Jun → `YYYY H1` (first half)
+- Jul–Dec → `YYYY H2` (second half)
+
+Use the current year (e.g. today is 2026-03-16 → `2026 H1`). The workspace folder name matches the Quarter value (e.g. for today, `2026 H1`).
+
+## Workspace Location
+
+Compute Quarter from the current date (Jan–Jun → `YYYY H1`, Jul–Dec → `YYYY H2`). The workspace path uses that value:
+
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/<Quarter>/
+```
+
+Example: for the current day (e.g. March 2026), Quarter = `2026 H1`, so the path is `.../Agoda/2026 H1/`.
+
+**Exception — Interview pages:** Pages for candidate interviews go in a year subfolder under `Interviews/`, not in the Quarter workspace:
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/Interviews/YYYY/
+```
+Example: `Interviews/2026/Interview - Mahesh K (2026-03-18).md`
+
+Template reference:
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/Work Template.md
+```
+
+## Daily Note (for modes "n" and "e")
+
+Daily notes live in a separate folder and use a different template.
+
+**Always use the real current date for "today" and "tomorrow".** Run a shell command to get it (e.g. `date +%Y-%m-%d` for `YYYY-MM-DD`, `date +%A` for weekday). Do not use the date from user_info or from any note — it may be stale.
+
+**Daily note folder:**
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Daily Note/
+```
+
+**Daily template (example structure):**
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Daily Note/Archive/Daily Template.md
+```
+
+**File naming:** one note per day, `YYYY-MM-DD.md` (e.g. `2026-03-16.md`).
+
+**Template structure:** Day, `# 🌅 **Morning Brief**` (carryovers, blocked/waiting, meetings), then `---` before each subsequent H1: `# 📋 **Planned Work**`, `# ⚡ **Unplanned**` (omit if empty), `# 📬 **Pending Requests**`, `# 👀 **On the Radar**`, `# 🌙 **End-of-Day Review**` (accomplished, didn't get done, continue tomorrow), `# 🏠 **Personal**`, `# 🌙 **Personal Review**` (accomplished, continue tomorrow). The first section (Morning Brief) has no `---` above it. Personal and Personal Review always come after the work End-of-Day Review.
+
+**Work board:** Work pages in `Agoda/<Quarter>/` (same as workspace; Quarter = computed value e.g. `2026 H1`). **In progress** = `Status: In progress`; **Next** = `Status: Next` (to pick up when in-progress tasks are done). Use both when building daily notes: list In progress first, then Next with a note that they are next.
+
+### Daily note conventions (apply in Note "n" and End "e" modes)
+
+**Universal bullet format (applies to ALL sections):** Every item follows the same order:
+1. **Title** — short and concise (e.g. `(BWZP) iOS SSR badge`, `Pending Int + Deint`). Never a full sentence.
+2. **Description / detail text** — sub-bullets explaining what/why
+3. **Links** (Jira, Slack, doc, etc.) — each on its own sub-bullet
+4. **Wiki-links `📄 [[Page]]`** — always last, each on its own sub-bullet
+
+Never mix description text and links on the same line. Never concatenate multiple references on one line.
+
+**Morning Brief** sub-sections use `### **Title**` headers; each item inside follows the same title → description → link → wiki-link order. Example:
+### **Continue from yesterday**
+- [ ] (BWZP) `payLaterOptions` data model
+	- Ask BE why it is `List[DFPayLaterOption]` instead of `List[PayLaterOptionCode]`
+	- [Sourcegraph link](https://...)
+- [ ] (Pending Int + Deint) Exp list for Torpong
+	- All bugs/int/deint exps for iOS & Android (ticket or exp name)
+
+**Planned Work section:** Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first; then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*. Example:
+- [ ] **(BWZP) iOS SSR badge**
+	- [PAYFLEX-233](https://...)
+	- 📄 [[(BWZP) iOS SSR badge]]
+- [ ] **Pending Int + Deint**
+	- List bugs/int/deint exps for iOS & Android.
+	- 📄 [[Pending Int + Deint]]
+- [ ] **(BWZP) iOS MMB CTA**
+	- Next (when in-progress tasks are done)
+	- [PAYFLEX-349](https://...)
+	- 📄 [[(BWZP) iOS MMB CTA]]
+
+**Unplanned section:** A top-level `# ⚡ **Unplanned**` section sits between Planned Work and Personal. Add it only when there are actual unplanned items; omit if empty. Each item uses `- [ ] **Title**` (checkbox + bold title), then sub-bullets for detail/links. Example:
+- [ ] **Reviewed two `MRs`**
+- [ ] **Allocation bias investigation (Card Page webview migration experiment)**
+	- Looked into [Slack thread](https://...).
+	- 📄 [[(Card Page) Allocation Bias Investigation]]
+
+**End-of-Day Review:** Use bullets (not numbered lists). Sub-sections use `### **Title**` headers; under each, first-level bullets are short labels in plain text (no bold); sub-bullets hold the detail. Do not bold the sub-bullet labels. Example:
+### **What I accomplished**
+- CMS
+	- added logic for dynamic `placeholder` values; created batch `MR` (not ready for review).
+### **What didn't get done & why**
+- Testing the badge on SSR iOS
+	- with the `response structure`. Waiting on `BE` tomorrow to confirm the open questions; if no changes are needed, will test with that structure, get the `MR` ready for review.
+
+**Highlight important keywords** with backticks (e.g. `MR`, `BE`, `response structure`, `placeholder`) so they stand out—but don't overdo it.
+
+**References:** Put links under the related bullet (e.g. Sourcegraph or doc link under the specific follow-up), not in a standalone Reference section.
+
+**Continue from yesterday:** What you get from a **previous** daily note — not necessarily yesterday; if you skipped a day, use the most recent note before the target date. When **creating** a daily note (Note "n"), find that previous note and copy all bullets from its **Continue tomorrow** section into **Morning Brief → Continue from yesterday**. If there is no previous note, leave Carryovers empty. **Continue tomorrow** in the new note stays empty until the user fills it at end of day (End "e" mode).
+
+**Concise but clear:** When writing End-of-Day Review from user input, keep it concise but do not cut important details (e.g. "test what?", "BE confirmation about what?"—include enough context so it's not vague).
+
+**End (e) cleanup:** When updating today's daily note, remove any section that is empty (e.g. Morning Brief with no carryovers/blocked/meetings, empty Personal, or any heading whose content is only placeholders or blank bullets). Treat it as cleaning up at the end of the day.
+
+## File Naming Convention
+
+`(FEATURE_CODE) Platform Short Description.md`
+
+Examples:
+- `(BWZP) iOS SSR badge.md`
+- `Integration DatePicker Fix (native).md`
+- `Deintegration Cashback Redemption Nudge.md`
+
+Use `(FEATURE_CODE)` prefix when the task is tied to a specific experiment/feature code. Otherwise use a plain descriptive name.
+
+## Page Structure
+
+New tasks default to `Status: Backlog`, `Type: 🌟 feature`.
+
+```
+---
+Status: Backlog
+Created time: YYYY-MM-DDTHH:MM
+Latest: [concise one-line summary of the most recent update]
+Quarter: YYYY H1 or H2
+Type: 🌟 feature
+---
+# **Latest Update**
+[entries only when there are actual updates — see below]
+
+# **What's about**
+- [brief description of the task]
+
+[optional: embed image if available]
+
+# **Reference**
+[only include sub-sections that have real content]
+- ### Contacts
+	- stakeholders
+		- [name / role]
+	- working groups
+		- [group]
+	- support channels
+		- [channel]
+- ### Links
+	- Jira stories
+		- [PAYFLEX-XXX](https://...)
+	- merge requests
+		- [MR title](https://...)
+	- experiment
+		- EXPERIMENT-ID-IOS
+
+# **Implementation Details**
+- **Data**:
+	- [models, APIs, mappers]
+- **Toggle** (if any):
+	- [experiment ID]
+- **UI / Logic** (if needed):
+	- [when it shows, what users see]
+
+# **Testing**
+-
+```
+
+## Critical Rules
+
+**Omit empty sections and sub-headers.** Never include a sub-header (Contacts, working groups, support channels, etc.) if there is no real content to put in it. An empty placeholder is worse than nothing.
+
+**No placeholder dates in Latest Update.** Only add a `📄 [[YYYY-MM-DD]]` entry when there is an actual note to record. Leave `# **Latest Update**` empty if there are no updates yet.
+
+**Contacts sub-section is usually absent.** Most task pages only have `### Links`. Only add `### Contacts` when stakeholders/working groups/support channels are actually known.
+
+**Use bullets and sub-bullets so content is easy to scan.** Avoid long single-line bullets. Prefer a **bold action verb or label** as the lead bullet, then indent the detail as a sub-bullet. This applies everywhere (Implementation Details, Latest Update, What's about, etc.).
+
+Latest Update example:
+- 📄 [[2026-03-16]]
+	- **Switched**
+		- `BWZP badge` to `CMS 560056` and added `room currency` in the placeholder.
+	- **Fixed**
+		- `payLaterOptions` GraphQL query — was `[Int]`, actually `[DFPayLaterOption]`.
+	- **==Follow up==**
+		- tomorrow: ask BE about the data model.
+
+Implementation Details example:
+- **Data**:
+	- `payLaterOptions: [DFPayLaterOption]?` on `DFPayLater`, each with `code: String?` (GraphQL enum: `"BWZP"`).
+- **Toggle**:
+	- `PaymentLocalisationToggles.bookWithZeroPay` (`PAYFLEX-233-IOS`).
+
+**Latest date on top, new bullets at bottom.** When adding a new date, insert it above older dates. When adding bullets under an existing date, append below the existing bullets. Omit any group or sub-section that has no content.
+
+
+## Interview Pages
+
+Interview notes live in a separate folder, organised by year:
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/Interviews/YYYY/
+```
+
+**Template:**
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/Interviews/Interview Template.md
+```
+
+**File naming:** `Interview - Candidate Name (YYYY-MM-DD).md` (e.g. `Interview - Mahesh K (2026-03-18).md`)
+
+**Frontmatter defaults:** `Type: 🎙️ interview`, `Status: In progress` (→ `Done` after), `Quarter: YYYY H1 or H2` (computed from interview date).
+
+**Scorecard sections:** Problem solving, Coding efficiency, Communication, Testing, Understanding performance (each /5, total /25).
+
+**After interview:** Fill Scorecard table, then write Summary (Excelled in / Struggled with / Conclusion with Recommendation + Pros + Cons). Update `Latest` frontmatter with one-line outcome and set `Status: Done`.
+
+## Workflow
+
+### Creating a new work page
+
+**Default for new tasks:** `Status: Backlog`, `Type: 🌟 feature` (override type if the user says bug/refactor/etc.).
+
+1. Ask the user for any missing key details: task name, Jira ticket, MR link, experiment ID, type (default feature), brief description. Collect what's available — skip sections for anything unknown.
+2. Determine the file name from the task context.
+3. Write the file using `python3` (required to handle special characters in filenames):
+
+```python
+import datetime
+
+# Compute quarter from current date (e.g. 2026 H1 for Jan–Jun 2026)
+workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/'
+filename = '(BWZP) iOS SSR badge.md'
+
+content = '''---
+Status: Backlog
+Created time: YYYY-MM-DDTHH:MM
+Quarter: YYYY H1 or H2
+Type: 🌟 feature
+---
+# **Latest Update**
+
+# **What's about**
+- [description]
+
+# **Reference**
+- ### Links
+\t- Jira stories
+\t\t- [🎫 PAYFLEX-233](https://agoda.atlassian.net/browse/PAYFLEX-233)
+\t- merge requests
+\t\t- [MR title](https://gitlab.agodadev.io/...)
+\t- experiment
+\t\t- PAYFLEX-233-IOS
+
+# **Implementation Details**
+- **Data**:
+\t- [models, APIs, mappers]
+- **Toggle** (if any):
+\t- [experiment ID]
+- **UI / Logic** (if needed):
+\t- [when it shows, what users see]
+
+# **Testing**
+-
+'''
+
+with open(workspace + filename, 'w') as f:
+    f.write(content)
+```
+
+### Updating an existing work page (shorthand: "u")
+
+**Adding a Latest Update entry** (most common update):
+```python
+# Quarter = computed from current date (e.g. 2026 H1)
+workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/'
+filename = '(BWZP) iOS SSR badge.md'
+
+with open(workspace + filename, 'r') as f:
+    content = f.read()
+
+new_entry = '- 📄 [[YYYY-MM-DD]]\n\t- [update note here]\n'
+content = content.replace('# **Latest Update**\n', f'# **Latest Update**\n{new_entry}')
+
+with open(workspace + filename, 'w') as f:
+    f.write(content)
+```
+
+**Updating status** (e.g., to Done):
+Find `Status: In progress` in frontmatter and replace with `Status: Done`.
+
+**Adding a link** (MR, Jira, etc.):
+Locate the relevant sub-section under `### Links` and append the new item.
+
+**Always update `Latest update` frontmatter** whenever adding a new Latest Update entry — replace with a concise one-line summary of what changed (e.g. `Sent MR for review; waiting on BE re data model`).
+
+**Sync to today's daily note:** After updating the work page, check today's daily note for any bullet that references the same page (via wikilink `[[Page name]]` or Jira ticket). If found:
+- In **Planned Work** — add a sub-bullet under the task summarising the update. Always linkify MR numbers and Jira tickets (e.g. `- [MR!39784](https://...) ready for review`).
+- In **On the Radar** / **Pending Requests** — update the description sub-bullet to reflect the latest state
+- If no reference exists in the daily note, skip silently (do not add one)
+
+The goal is to keep the daily note in sync without requiring a separate `/work t` step.
+
+### Reformatting an existing work page (shorthand: "f")
+
+Use when a page exists but lacks standard structure (no frontmatter, bare lists, etc.). The goal is to wrap the existing content in the standard template without losing any data.
+
+1. Read the existing file with `python3`.
+2. Identify the content type — determine appropriate `Type` from the content (feature, refactor, etc.).
+3. Preserve all existing content — map it into the correct sections. If content doesn't fit standard sections (e.g., custom tracking lists), keep it as named `# **Section**` headings after `# **What's about**`.
+4. Add frontmatter with `Created time` set to today, `Status: In progress`, leave `Updated time` empty.
+5. Add `# **Latest Update**` (empty) and `# **What's about**` with a one-line description inferred from the content.
+6. Write the reformatted file back.
+
+```python
+# Quarter = computed from current date (e.g. 2026 H1)
+workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/'
+filename = 'Pending Int + Deint.md'
+
+# Read existing content first, then rewrite with standard template wrapping it
+with open(workspace + filename, 'r') as f:
+    existing = f.read()
+
+# Rewrite with frontmatter + standard sections + preserved content
+content = '''---
+Status: In progress
+Created time: YYYY-MM-DDTHH:MM
+Quarter: YYYY H1 or H2
+Type: 🔧 refactor
+---
+# **Latest Update**
+
+# **What\\'s about**
+- [inferred one-line description]
+
+[preserved sections follow]
+'''
+
+with open(workspace + filename, 'w') as f:
+    f.write(content)
+```
+
+### Note (n) — Create daily note
+
+Create a **new daily note for today** under the Daily Note folder. Use the Daily Template structure and the **Daily note conventions** above (Planned Work section format, top-level Unplanned section after Planned Work, backticks for keywords, references under related bullets).
+
+1. **Get today's date:** Run `date +%Y-%m-%d` and `date +%A` (or equivalent) to get the real current date and weekday. Do not use user_info or any note. Use this for "today"; for "tomorrow" use the next calendar day. **Resolve paths:** Daily note folder = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Daily Note/`. Template = `Daily Note/Archive/Daily Template.md`. Target file = `YYYY-MM-DD.md` (today or tomorrow as requested).
+2. **Read the Daily Template** to get the exact structure (Day, Morning Brief, Work, Personal, End-of-Day Review). Use **bullets** for End-of-Day Review (not numbered lists).
+3. **Continue from yesterday:** Find the most recent daily note with date **before** the target note date (e.g. list `Daily Note/*.md`, pick the latest `YYYY-MM-DD` < target). Read that note's **Continue tomorrow** section. Those bullets become **Continue from yesterday** in the new note. If no previous note exists, leave Carryovers empty. Apply the universal bullet format: **bold title** on the first line, description/action as a sub-bullet, then links, then wiki-link — never put description or action on the same line as the title.
+4. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones.
+5. **List work:** Look at the **previous daily note's Planned Work** section. For each unchecked task, decide where it goes in the new note:
+   - **Planned Work** — task requires active work today (coding, investigation, decision, etc.)
+   - **On the Radar** (`==(Waiting)==`) — task requires no action from me today (e.g. MR out for review, waiting on BE/someone else). Include key links and wiki-link.
+   Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave **Continue tomorrow** empty.
+6. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
+7. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
+
+### End (e) — Update today's daily note
+
+**Update the existing daily note for today** (do not create a new one). Ask the user for what they accomplished and what didn't get done, then pull follow-ups from In Progress work. Use the **Daily note conventions** (End-of-Day Review format: section bold, lead bullets plain, sub-bullets for detail; backticks for keywords; concise but not vague). Note: Unplanned items go in the top-level `# **Unplanned**` section (between Planned Work and Personal), not in the End-of-Day Review.
+
+1. **Get today's date:** Run `date +%Y-%m-%d` to get the real current date (do not use user_info or any note). **Open today's note:** Path = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Daily Note/YYYY-MM-DD.md`. If it does not exist, create it from the Daily Template first (as in Note mode). If the note exists but does not yet have `# 🌙 **End-of-Day Review**` and `# 🌙 **Personal Review**` sections, append them now before proceeding.
+2. **Ask the user (concise):**
+   - What did you accomplish today? (for **What I accomplished**)
+   - What didn't get done and why? (for **What didn't get done & why**)
+3. **Check for unchecked items not mentioned:** After the user replies, scan today's note for any unchecked (`- [ ]`) items across all sections that the user didn't mention. For each one, ask about it — unless it's obviously time-bound and not due today (e.g. a monitoring event scheduled for a future date). Do not assume; ask.
+4. **Pull follow-ups:** Scan `Agoda/<Quarter>/*.md` (Quarter = computed from current date, e.g. `2026 H1`) for `Status: In progress`. From each page, collect **==Follow up==** (or "follow up", "follow-up") bullets from Latest Update. Attach any reference links under the related follow-up bullet (not a separate Reference section).
+5. **Update the note:** Under **End-of-Day Review**, fill using the convention: **What I accomplished** (planned work only); **What didn't get done & why** with planned items not done; short plain-text lead bullets and sub-bullet detail; highlight terms with backticks; keep concise but include enough context. **Continue tomorrow** — bullets from In Progress; new bullets at bottom. Each item uses the same format as Planned Work: bold title, sub-bullets for detail, links, and wiki-link. If there are unplanned items to add, insert/append them in the top-level `# **Unplanned**` section (between Planned Work and Personal), not in End-of-Day Review. **When deciding whether to include an On the Radar item in "Continue tomorrow":** include it only if there is something relevant for the next day (e.g. a monitoring event scheduled for tomorrow). Exclude it if the timeline is clearly beyond the next day (e.g. "est. next week" when tomorrow is still this week). **Always convert vague time estimates to explicit dates** when writing "Continue tomorrow" sub-bullets (e.g. replace "est. next week" with "est. week of YYYY-MM-DD") — this makes future notes easier to reason about and avoids stale carry-overs.
+6. **Clean up:** Remove any section that is empty (e.g. Morning Brief with no items, empty Personal, or headings with only placeholders). Leave the note tidy at end of day.
+
+### Track (t) — Capture into today's note or related work page
+
+**Quickly capture something to act on or monitor**, from a Slack thread, image, or description. If the content is clearly related to an existing work page, add a Latest Update entry there (and sync to today's note). Otherwise, add a `- [ ] **Title**` checkbox bullet to the appropriate section in today's note. Use context clues (Jira ticket, keywords, names) to infer the project and section. Only ask if genuinely ambiguous after reading the content.
+
+1. **Read the input** — Slack link, image screenshot, or user description. Extract: what it is, who's involved, what action (if any) is needed.
+2. **Draft the bullet** using the universal format:
+   ```
+   - [ ] **Short title**
+   	- context / detail
+   	- [Slack thread](https://...)
+   ```
+3. **Determine the section** based on context:
+   - **Unplanned** — something that already happened today and took time
+   - **Pending Requests** — someone asked *me* to do something (review code, set something up, help with a task)
+   - **On the Radar** — *I'm waiting on others* to respond, or an upcoming event/maintenance to monitor; not urgent. Always prefix the title with a highlight category: `==(Waiting)==`, `==(Monitoring)==`, or `==(Blocked)==`. **Before adding here, check all other sections.** If the item already exists anywhere in the note (e.g. already in Planned Work), update that bullet in place instead of duplicating it here.
+   - **Personal** — non-work item
+4. **Write immediately** — no confirmation needed. Append the bullet to the correct section in today's note using `python3`. Replace the placeholder (`- \n` or `- [ ] \n`) if the section is still empty, otherwise append after the last bullet in that section.
+5. **Report back** with the bullet added and which section it went into.
+
+### Reading an existing work page
+
+Use `python3` to read (avoids shell quoting issues with special characters):
+```python
+with open(workspace + filename, 'r') as f:
+    print(f.read())
+```
+
+## Frontmatter Reference
+
+| Field | Values |
+|-------|--------|
+| Status | `Backlog`, `In progress`, `Next`, `Done`, `Blocked`, `On hold` |
+| Type | `🌟 feature`, `🐛 bug`, `🔧 refactor`, `🧪 experiment` |
+| Quarter | `YYYY H1 or H2` |
+| Created time | `YYYY-MM-DDTHH:MM` |

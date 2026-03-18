@@ -1,0 +1,10 @@
+# Ignore everything
+*
+
+# Allow specific folders
+!skills/
+!skills/**
+
+# Allow specific files
+!CLAUDE.md
+!.gitignore
