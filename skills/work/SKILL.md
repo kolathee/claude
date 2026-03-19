@@ -78,7 +78,11 @@ Never mix description text and links on the same line. Never concatenate multipl
 - [ ] (Pending Int + Deint) Exp list for Torpong
 	- All bugs/int/deint exps for iOS & Android (ticket or exp name)
 
-**Planned Work section:** Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first; then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*. Example:
+**Planned Work section:** Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first; then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*.
+
+**Actionable items go to the top, waiting/non-actionable items go to the bottom** — applies to ALL sections (Morning Brief, Planned Work, Unplanned, Pending Requests, On the Radar). An item is waiting/non-actionable if it requires confirmation from someone else, is blocked, or has no action you can take right now. Actionable items at the top let you focus immediately on what can be worked on.
+
+**Highlight action verbs with `==verb==`** in ALL sections — in the description sub-bullet and in the title if the verb appears there. Examples: `==Relaunch==`, `==Waiting==`, `==Start==`, `==Follow up==`, `==Review==`, `==Ask==`, `==Merge==`, `==Close==`. This helps scan tasks at a glance. Example:
 - [ ] **(BWZP) iOS SSR badge**
 	- [PAYFLEX-233](https://...)
 	- 📄 [[(BWZP) iOS SSR badge]]
@@ -127,11 +131,11 @@ Use `(FEATURE_CODE)` prefix when the task is tied to a specific experiment/featu
 
 ## Page Structure
 
-New tasks default to `Status: Backlog`, `Type: 🌟 feature`.
+New tasks default to `Status: Not started`, `Type: 🌟 feature`, and are saved into the `Backlog/` subfolder.
 
 ```
 ---
-Status: Backlog
+Status: Not started
 Created time: YYYY-MM-DDTHH:MM
 Latest: [concise one-line summary of the most recent update]
 Quarter: YYYY H1 or H2
@@ -226,21 +230,29 @@ Interview notes live in a separate folder, organised by year:
 
 ### Creating a new work page
 
-**Default for new tasks:** `Status: Backlog`, `Type: 🌟 feature` (override type if the user says bug/refactor/etc.).
+**Default for new tasks:** `Status: Not started`, `Type: 🌟 feature`, saved into `Backlog/` subfolder (override type if the user says bug/refactor/etc.).
 
-1. Ask the user for any missing key details: task name, Jira ticket, MR link, experiment ID, type (default feature), brief description. Collect what's available — skip sections for anything unknown.
-2. Determine the file name from the task context.
-3. Write the file using `python3` (required to handle special characters in filenames):
+**Type inference from title/content — always check before defaulting to feature:**
+- Title contains "Investigation", "Investigate", "Debug", "Root cause" → `🔍 investigation`
+- Title contains "Experiment", "Exp", "A/B", "Launch", "Allocation bias" → `🧪 experiment`
+- Title contains "Bug", "Fix", "Issue", "Error" → `🐛 bug`
+- Title contains "Refactor", "Cleanup", "Migration", "Migrate" → `🔧 refactor`
+- Otherwise → `🌟 feature`
+
+1. **Search first.** Before creating, run `find` across the entire `Agoda/<Quarter>/` tree (including all subfolders) for any file whose name contains key words from the task. If a match is found, open it instead of creating a new one.
+2. Ask the user for any missing key details: task name, Jira ticket, MR link, experiment ID, type (default feature), brief description. Collect what's available — skip sections for anything unknown.
+3. Determine the file name from the task context.
+4. Write the file using `python3` (required to handle special characters in filenames):
 
 ```python
 import datetime
 
 # Compute quarter from current date (e.g. 2026 H1 for Jan–Jun 2026)
-workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/'
+workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/Backlog/'
 filename = '(BWZP) iOS SSR badge.md'
 
 content = '''---
-Status: Backlog
+Status: Not started
 Created time: YYYY-MM-DDTHH:MM
 Quarter: YYYY H1 or H2
 Type: 🌟 feature
@@ -384,13 +396,13 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
    ```
    - [ ] **Short title**
    	- context / detail
-   	- [Slack thread](https://...)
+   	- [💬 Slack thread](https://...)
    ```
 3. **Determine the section** based on context:
    - **Unplanned** — something that already happened today and took time
    - **Pending Requests** — someone asked *me* to do something (review code, set something up, help with a task)
    - **On the Radar** — *I'm waiting on others* to respond, or an upcoming event/maintenance to monitor; not urgent. Always prefix the title with a highlight category: `==(Waiting)==`, `==(Monitoring)==`, or `==(Blocked)==`. **Before adding here, check all other sections.** If the item already exists anywhere in the note (e.g. already in Planned Work), update that bullet in place instead of duplicating it here.
-   - **Personal** — non-work item
+   - **Personal** — non-work item (events, appointments, errands). For events with a physical location, include a Google Maps search link: `[Venue Name](https://www.google.com/maps/search/?api=1&query=Venue+Name+City)`. For events with a time, include it in the title (e.g. `Event Name 🎟️ 18:00 – 22:00`).
 4. **Write immediately** — no confirmation needed. Append the bullet to the correct section in today's note using `python3`. Replace the placeholder (`- \n` or `- [ ] \n`) if the section is still empty, otherwise append after the last bullet in that section.
 5. **Report back** with the bullet added and which section it went into.
 
@@ -406,7 +418,7 @@ with open(workspace + filename, 'r') as f:
 
 | Field | Values |
 |-------|--------|
-| Status | `Backlog`, `In progress`, `Next`, `Done`, `Blocked`, `On hold` |
-| Type | `🌟 feature`, `🐛 bug`, `🔧 refactor`, `🧪 experiment` |
+| Status | `Not started`, `In progress`, `Next`, `Done`, `Blocked`, `On hold` |
+| Type | `🌟 feature`, `🐛 bug`, `🔧 refactor`, `🧪 experiment`, `🔍 investigation` |
 | Quarter | `YYYY H1 or H2` |
 | Created time | `YYYY-MM-DDTHH:MM` |

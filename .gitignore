@@ -4,6 +4,12 @@
 # Allow specific folders
 !skills/
 !skills/**
+!rules/
+!rules/**
+!projects/
+!projects/-Users-kpayuhawatta/
+!projects/-Users-kpayuhawatta/memory/
+!projects/-Users-kpayuhawatta/memory/**
 
 # Allow specific files
 !CLAUDE.md
