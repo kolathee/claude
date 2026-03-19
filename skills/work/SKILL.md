@@ -318,6 +318,8 @@ Locate the relevant sub-section under `### Links` and append the new item.
 - In **On the Radar** / **Pending Requests** — update the description sub-bullet to reflect the latest state
 - If no reference exists in the daily note, skip silently (do not add one)
 
+**Re-sort after status changes to waiting:** If the update makes a task waiting/non-actionable (e.g. the update says "waiting on X", "==waiting==", blocked, or sent for review), also reorder that bullet within its section in today's note — move it to the **bottom** of the section (below all actionable items), following the ordering rule. Do this as part of the same sync step.
+
 The goal is to keep the daily note in sync without requiring a separate `/work t` step.
 
 ### Reformatting an existing work page (shorthand: "f")
