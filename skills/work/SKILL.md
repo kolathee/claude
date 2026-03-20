@@ -56,7 +56,7 @@ Daily notes live in a separate folder and use a different template.
 
 **File naming:** one note per day, `YYYY-MM-DD.md` (e.g. `2026-03-16.md`).
 
-**Template structure:** Day, `# 🌅 **Morning Brief**` (carryovers, blocked/waiting, meetings), then `---` before each subsequent H1: `# 📋 **Planned Work**`, `# ⚡ **Unplanned**` (omit if empty), `# 📬 **Pending Requests**`, `# 👀 **On the Radar**`, `# 🌙 **End-of-Day Review**` (accomplished, didn't get done, continue tomorrow), `# 🏠 **Personal**`, `# 🌙 **Personal Review**` (accomplished, continue tomorrow). The first section (Morning Brief) has no `---` above it. Personal and Personal Review always come after the work End-of-Day Review.
+**Template structure:** Day, then straight into `# 📋 **Planned Work**` (no Morning Brief section). Remaining H1s separated by `---`: `# ⚡ **Unplanned**` (omit if empty), `# 📬 **Pending Requests**`, `# 👀 **On the Radar**`, `# 🌙 **End-of-Day Review**` (accomplished, didn't get done, continue next workday), `# 🏠 **Personal**`, `# 🌙 **Personal Review**` (accomplished, continue next workday). Personal and Personal Review always come after the work End-of-Day Review.
 
 **Work board:** Work pages in `Agoda/<Quarter>/` (same as workspace; Quarter = computed value e.g. `2026 H1`). **In progress** = `Status: In progress`; **Next** = `Status: Next` (to pick up when in-progress tasks are done). Use both when building daily notes: list In progress first, then Next with a note that they are next.
 
@@ -70,17 +70,9 @@ Daily notes live in a separate folder and use a different template.
 
 Never mix description text and links on the same line. Never concatenate multiple references on one line.
 
-**Morning Brief** sub-sections use `### **Title**` headers; each item inside follows the same title → description → link → wiki-link order. Example:
-### **Continue from yesterday**
-- [ ] (BWZP) `payLaterOptions` data model
-	- Ask BE why it is `List[DFPayLaterOption]` instead of `List[PayLaterOptionCode]`
-	- [Sourcegraph link](https://...)
-- [ ] (Pending Int + Deint) Exp list for Torpong
-	- All bugs/int/deint exps for iOS & Android (ticket or exp name)
+**Planned Work section:** The first section in the note — starts right after the Day line. Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first (including items carried forward from the previous day's "Continue" section); then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*.
 
-**Planned Work section:** Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first; then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*.
-
-**Actionable items go to the top, waiting/non-actionable items go to the bottom** — applies to ALL sections (Morning Brief, Planned Work, Unplanned, Pending Requests, On the Radar). An item is waiting/non-actionable if it requires confirmation from someone else, is blocked, or has no action you can take right now. Actionable items at the top let you focus immediately on what can be worked on.
+**Actionable items go to the top, waiting/non-actionable items go to the bottom** — applies to ALL sections (Planned Work, Unplanned, Pending Requests, On the Radar). An item is waiting/non-actionable if it requires confirmation from someone else, is blocked, or has no action you can take right now. Actionable items at the top let you focus immediately on what can be worked on.
 
 **On the Radar time horizon — 1–2 weeks max.** Only keep items in On the Radar if they are expected to be actionable within ~2 weeks. If something will take longer (e.g. "est. next month", "after X which is 3+ weeks away"), drop it from On the Radar entirely until it becomes relevant.
 
@@ -116,11 +108,11 @@ Never mix description text and links on the same line. Never concatenate multipl
 
 **References:** Put links under the related bullet (e.g. Sourcegraph or doc link under the specific follow-up), not in a standalone Reference section.
 
-**Continue from yesterday:** What you get from a **previous** daily note — not necessarily yesterday; if you skipped a day, use the most recent note before the target date. When **creating** a daily note (Note "n"), find that previous note and copy all bullets from its **Continue tomorrow** section into **Morning Brief → Continue from yesterday**. If there is no previous note, leave Carryovers empty. **Continue tomorrow** in the new note stays empty until the user fills it at end of day (End "e" mode).
+**Carry-forward from previous day:** When **creating** a daily note (Note "n"), find the most recent previous weekday note (see step 3 below) and copy all bullets from its **Continue** section directly into **Planned Work**. If there is no previous note, start Planned Work from work board status only. The **Continue** section in the new note stays empty until the user fills it at end of day (End "e" mode).
 
 **Concise but clear:** When writing End-of-Day Review from user input, keep it concise but do not cut important details (e.g. "test what?", "BE confirmation about what?"—include enough context so it's not vague).
 
-**End (e) cleanup:** When updating today's daily note, remove any section that is empty (e.g. Morning Brief with no carryovers/blocked/meetings, empty Personal, or any heading whose content is only placeholders or blank bullets). Treat it as cleaning up at the end of the day.
+**End (e) cleanup:** When updating today's daily note, remove any section that is empty (e.g. empty Personal, or any heading whose content is only placeholders or blank bullets). Treat it as cleaning up at the end of the day.
 
 ## File Naming Convention
 
@@ -381,20 +373,30 @@ with open(workspace + filename, 'w') as f:
 Create a **new daily note for today** under the Daily Note folder. Use the Daily Template structure and the **Daily note conventions** above (Planned Work section format, top-level Unplanned section after Planned Work, backticks for keywords, references under related bullets).
 
 1. **Get today's date:** Run `date +%Y-%m-%d` and `date +%A` (or equivalent) to get the real current date and weekday. Do not use user_info or any note. Use this for "today"; for "tomorrow" use the next calendar day. **Resolve paths:** Daily note folder = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Daily Note/`. Template = `Daily Note/Archive/Daily Template.md`. Target file = `YYYY-MM-DD.md` (today or tomorrow as requested).
-2. **Read the Daily Template** to get the exact structure (Day, Morning Brief, Work, Personal, End-of-Day Review). Use **bullets** for End-of-Day Review (not numbered lists).
-3. **Continue from yesterday:** Find the most recent daily note with date **before** the target note date (e.g. list `Daily Note/*.md`, pick the latest `YYYY-MM-DD` < target). Read that note's **Continue tomorrow** section. Those bullets become **Continue from yesterday** in the new note. If no previous note exists, leave Carryovers empty. Apply the universal bullet format: **bold title** on the first line, description/action as a sub-bullet, then links, then wiki-link — never put description or action on the same line as the title.
-4. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones.
-5. **List work:** Look at the **previous daily note's Planned Work** section. For each unchecked task, decide where it goes in the new note:
+2. **Weekend check:** If the target date falls on Saturday or Sunday, create a **personal-only note** — skip all work sections (Planned Work, Pending Requests, On the Radar) and only include **Personal**. Structure:
+   ```
+   **Day**: Saturday
+
+   ---
+   # 🏠 **Personal**
+   - 
+   ```
+   Archive any previous notes still in the top-level `Daily Note/` folder (move to `Daily Note/Archive/`). Then stop — do not proceed to steps 3–9.
+3. **Read the Daily Template** to get the exact structure (Day, Planned Work, Pending Requests, On the Radar, Personal, End-of-Day Review). Use **bullets** for End-of-Day Review (not numbered lists).
+4. **Carry-forward into Planned Work:** Find the **latest existing weekday daily note** before the target date. To do this: list all `YYYY-MM-DD.md` files in both `Daily Note/` and `Daily Note/Archive/`, filter to dates < target date that fall on weekdays (Mon–Fri), then pick the most recent one. It may not be "yesterday" — e.g. if today is Monday, the latest weekday note could be Thursday or Wednesday (if Friday's note doesn't exist). Read that note's **Continue** section (titled "Continue tomorrow", "Continue on Monday", or similar). Those bullets go directly into **Planned Work** in the new note. If no previous weekday note exists, start Planned Work from work board status only. Apply the universal bullet format: **bold title** on the first line, description/action as a sub-bullet, then links, then wiki-link — never put description or action on the same line as the title.
+5. **Archive the previous note:** After reading the previous daily note (from step 4), move it into the `Daily Note/Archive/` folder. This keeps the main `Daily Note/` folder clean — only the current day's note lives at the top level. Also archive any other notes still at the top level (e.g. weekend notes).
+6. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones.
+7. **List work:** Look at the **previous daily note's Planned Work** section. For each unchecked task, decide where it goes in the new note:
    - **Planned Work** — task requires active work today (coding, investigation, decision, etc.)
    - **On the Radar** (`==(Waiting)==`) — task requires no action from me today (e.g. MR out for review, waiting on BE/someone else). Include key links and wiki-link.
-   Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave **Continue tomorrow** empty.
-6. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
-7. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
-8. **Monday check:** If today is Monday, add the following as the **first item** in Planned Work (before all other tasks):
-   ```
-   - [ ] **Sign off iOS + Android**
-   	- ==Review== and ==sign off== iOS & Android builds
-   ```
+   Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave the **Continue** section empty (it's filled at end of day).
+8. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
+9. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
+10. **Monday check:** If today is Monday, add the following as the **first item** in Planned Work (before all other tasks):
+    ```
+    - [ ] **Sign off iOS + Android**
+    	- ==Review== and ==sign off== iOS & Android builds
+    ```
 
 ### End (e) — Update today's daily note
 
@@ -406,8 +408,8 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
    - What didn't get done and why? (for **What didn't get done & why**)
 3. **Check for unchecked items not mentioned:** After the user replies, scan today's note for any unchecked (`- [ ]`) items across all sections that the user didn't mention. For each one, ask about it — unless it's obviously time-bound and not due today (e.g. a monitoring event scheduled for a future date). Do not assume; ask.
 4. **Pull follow-ups:** Scan `Agoda/<Quarter>/*.md` (Quarter = computed from current date, e.g. `2026 H1`) for `Status: In progress`. From each page, collect **==Follow up==** (or "follow up", "follow-up") bullets from Latest Update. Attach any reference links under the related follow-up bullet (not a separate Reference section).
-5. **Update the note:** Under **End-of-Day Review**, fill using the convention: **What I accomplished** (planned work only); **What didn't get done & why** with planned items not done; short plain-text lead bullets and sub-bullet detail; highlight terms with backticks; keep concise but include enough context. **Continue tomorrow** — bullets from In Progress; new bullets at bottom. Each item uses the same format as Planned Work: bold title, sub-bullets for detail, links, and wiki-link. If there are unplanned items to add, insert/append them in the top-level `# **Unplanned**` section (between Planned Work and Personal), not in End-of-Day Review. **When deciding whether to include an On the Radar item in "Continue tomorrow":** include it only if there is something relevant for the next day (e.g. a monitoring event scheduled for tomorrow). Exclude it if the timeline is clearly beyond the next day (e.g. "est. next week" when tomorrow is still this week). **Always convert vague time estimates to explicit dates** when writing "Continue tomorrow" sub-bullets (e.g. replace "est. next week" with "est. week of YYYY-MM-DD") — this makes future notes easier to reason about and avoids stale carry-overs.
-6. **Clean up:** Remove any section that is empty (e.g. Morning Brief with no items, empty Personal, or headings with only placeholders). Leave the note tidy at end of day.
+5. **Update the note:** Under **End-of-Day Review**, fill using the convention: **What I accomplished** (planned work only); **What didn't get done & why** with planned items not done; short plain-text lead bullets and sub-bullet detail; highlight terms with backticks; keep concise but include enough context. **Continue section** — use a weekend-aware heading: if today is Friday (or Sat/Sun), title it `### **Continue on Monday**`; otherwise title it `### **Continue tomorrow**`. Bullets from In Progress; new bullets at bottom. Each item uses the same format as Planned Work: bold title, sub-bullets for detail, links, and wiki-link. If there are unplanned items to add, insert/append them in the top-level `# **Unplanned**` section (between Planned Work and Personal), not in End-of-Day Review. **When deciding whether to include an On the Radar item in the Continue section:** include it only if there is something relevant for the next workday (e.g. a monitoring event). Exclude it if the timeline is clearly beyond the next workday. **Always convert vague time estimates to explicit dates** when writing Continue sub-bullets (e.g. replace "est. next week" with "est. week of YYYY-MM-DD") — this makes future notes easier to reason about and avoids stale carry-overs.
+6. **Clean up:** Remove any section that is empty (e.g. empty Personal, or headings with only placeholders). Leave the note tidy at end of day.
 
 ### Track (t) — Capture into today's note or related work page
 
