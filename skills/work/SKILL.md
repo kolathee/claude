@@ -379,6 +379,11 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
    Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave **Continue tomorrow** empty.
 6. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
 7. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
+8. **Monday check:** If today is Monday, add the following as the **first item** in Planned Work (before all other tasks):
+   ```
+   - [ ] **Sign off iOS + Android**
+   	- ==Review== and ==sign off== iOS & Android builds
+   ```
 
 ### End (e) — Update today's daily note
 
