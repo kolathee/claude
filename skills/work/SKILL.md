@@ -312,6 +312,17 @@ with open(workspace + filename, 'w') as f:
 **Updating status** (e.g., to Done):
 Find `Status: In progress` in frontmatter and replace with `Status: Done`.
 
+**When status is set to Done — move page to `Done/` folder:**
+```python
+import os, shutil
+
+workspace = '/Users/kpayuhawatta/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/2026 H1/'
+filename = '(BWZP) iOS SSR badge.md'
+
+shutil.move(workspace + filename, workspace + 'Done/' + filename)
+```
+Always move the file after writing the updated content. The `Done/` folder path is `<workspace>Done/`.
+
 **Adding a link** (MR, Jira, etc.):
 Locate the relevant sub-section under `### Links` and append the new item.
 
