@@ -82,6 +82,10 @@ Never mix description text and links on the same line. Never concatenate multipl
 
 **Actionable items go to the top, waiting/non-actionable items go to the bottom** — applies to ALL sections (Morning Brief, Planned Work, Unplanned, Pending Requests, On the Radar). An item is waiting/non-actionable if it requires confirmation from someone else, is blocked, or has no action you can take right now. Actionable items at the top let you focus immediately on what can be worked on.
 
+**On the Radar time horizon — 1–2 weeks max.** Only keep items in On the Radar if they are expected to be actionable within ~2 weeks. If something will take longer (e.g. "est. next month", "after X which is 3+ weeks away"), drop it from On the Radar entirely until it becomes relevant.
+
+**"drop" keyword** — when the user says "drop [item]", remove it from today's daily note and, if it's a work page, move it to the `Backlog/` subfolder and set `Status: On hold`. Add a `[[YYYY-MM-DD]]` Latest Update entry explaining why it was dropped (e.g. "not in this sprint", "timeline too long", "blocked on design"). This is the standard way to deprioritize something.
+
 **Highlight action verbs with `==verb==`** in ALL sections — in the description sub-bullet and in the title if the verb appears there. Examples: `==Relaunch==`, `==Waiting==`, `==Start==`, `==Follow up==`, `==Review==`, `==Ask==`, `==Merge==`, `==Close==`. This helps scan tasks at a glance. Example:
 - [ ] **(BWZP) iOS SSR badge**
 	- [PAYFLEX-233](https://...)
