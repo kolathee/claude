@@ -28,6 +28,10 @@ Live in `~/.claude/rules/`:
 ## Git Rules
 - **Always confirm before committing or pushing.** Show staged files + commit message, wait for approval.
 
+## Calendar Rules
+- **Always invoke the `plan-calendar` skill** before any calendar scheduling, rescheduling, or day planning work — before fetching data or touching any events.
+- **Always check current date and time** before scheduling — never assume it's the start of the day.
+
 ## Tool Rules
 - **Slack URLs**: Always use `mcp__plugin_productivity_slack__slack_read_thread` (channel_id + message_ts). Never use Playwright for Slack.
 - **Calculon MCP**: All tools are read-only. Creating experiments requires Playwright (Calculon UI).
