@@ -15,7 +15,7 @@ Load on demand — only when the topic is relevant:
 - People, Terms, Projects, Tools, Preferences → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-context.md` (create if missing)
 - Personal scheduling, routines → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/personal.md`
 - **Claude preferences & memory (always load)** → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/claude-memory.md`
-- Investment evaluation → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/contexts/investment-rules.md`
+- Investment evaluation → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/AI Contexts/investment-rules.md`
 
 ## Rules Files
 Live in `~/.claude/rules/`:
