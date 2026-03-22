@@ -13,8 +13,7 @@ Load on demand — only when the topic is relevant:
 - MCP tools, Notion, Outlook, API tokens → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-mcp-api-settings.md`
 - Grafana → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/grafana.md`
 - People, Terms, Projects, Tools, Preferences → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-context.md` (create if missing)
-- Personal scheduling, routines → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/personal.md`
-- **Claude preferences & memory (always load)** → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/claude-memory.md`
+- Personal scheduling, routines, preferences → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/personal.md`
 - Investment evaluation → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/AI Contexts/investment-rules.md`
 
 ## Rules Files
