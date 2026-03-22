@@ -2,6 +2,8 @@
 *
 
 # Allow specific folders
+!agents/
+!agents/**
 !skills/
 !skills/**
 !rules/
