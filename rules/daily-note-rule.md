@@ -30,3 +30,7 @@ Section order (final):
 - **On the Radar** — only items that were *planned* to monitor/watch (e.g. a scheduled deployment, a known experiment rollout you're intentionally keeping an eye on).
 
 If monitoring was triggered by someone asking you unexpectedly → **Unplanned**, not On the Radar.
+
+## Writing Style
+
+Never use `==highlight==` markup when writing the `latest` property value. Use plain text only.
