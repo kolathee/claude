@@ -10,7 +10,19 @@ Correct order of sections in a daily note:
 4. On the Radar
 5. Personal
 
-Never put On the Radar before Pending Requests.
+## Sorting Within Sections
+
+**Always put unchecked items above checked items** in every section (Planned Work, Unplanned, On the Radar, Pending Requests). Checked = done; they sink to the bottom.
+
+## No Pending Requests Section
+
+**Pending Requests is merged into Unplanned.** There is no separate Pending Requests section. Anything someone asked Cup to do unexpectedly goes into Unplanned alongside other unplanned work.
+
+Section order (final):
+1. Planned Work
+2. Unplanned
+3. On the Radar
+4. Personal
 
 ## Unplanned vs On the Radar
 
