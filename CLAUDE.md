@@ -23,6 +23,13 @@ Live in `~/.claude/rules/`:
 | `task-assignment-rule.md` | Calendar overlap SOP, Outlook quirks, conflict ignore list |
 | `investment-rules.md` | Investment rules/criteria |
 | `calendar-rule.md` | Always check availability before creating calendar events |
+| `daily-note-rule.md` | Daily note section order and conventions |
+
+## Memory Rules
+- When asked to "remember", "learn", or "don't forget" something, save it to the relevant skill, rules, or context file — **never** to `~/.claude/projects/.../memory/MEMORY.md`.
+  - Skill-related learnings → update the relevant skill file (e.g. `work` skill)
+  - Workflow/tool rules → add to the appropriate `~/.claude/rules/*.md` file
+  - Context (people, projects, preferences) → update the relevant AI Context file in Obsidian
 
 ## Git Rules
 - **Always confirm before committing or pushing.** Show staged files + commit message, wait for approval.
