@@ -1,14 +1,15 @@
 # Claude Config
 
 ## Me
-Kolathee Payuhawattana (Cup), Senior Software Engineer at Agoda — Payment Flexibility (PAYFLEX) team.
+Kolathee Payuhawattana (Cup), Senior Software Engineer at Agoda — Payment Localisation team (Jira project: PAYFLEX).
 
 ## Context Loading
 Load on demand — only when the topic is relevant:
 - Cashback issues, config, display logic → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback.md`
 - Cashback DB schema → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback-schema.md`
 - Cashback investigations → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback-investigations.md`
-- Agoda Cash, WalletAPI → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/agodacash.md`
+- Agoda Cash, WalletAPI, GiftCard API → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/agodacash.md`
+- MPBE, booking workflow, BTA, workflow states, itinerary vs booking → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/mpbe.md`
 - BWZP → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/bwzp.md`
 - MCP tools, Notion, Outlook, API tokens → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-mcp-api-settings.md`
 - Grafana → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/grafana.md`
