@@ -32,6 +32,18 @@ For each item, also collect:
 - The `==Action==` annotation (e.g., `==Ask==`, `==Share==`, `==Check==`, `==Prepare==`) — this is the intended verb
 - Any embedded links: Slack thread URLs, Jira ticket URLs, Calculon experiment URLs, Obsidian note wikilinks
 
+### 2.5. Enrich Missing Contact Sources with Glean
+
+For any item where the **"Where to Act"** is unclear or missing (no Slack URL, no channel name, no person link), use **Glean MCP** (`mcp__plugin_agoda-skills_glean__search`) to find the most accurate contact point:
+
+- Search for the Slack channel: e.g. `"#ceg-wizard-flow slack channel"` or `"<team name> slack channel"`
+- Search for the person: e.g. `"Sangit Agoda"` to find their Slack handle or team
+- Search for the Jira project or team: e.g. `"PAYFLEX-352 owner"` or `"FMS team Agoda"`
+
+Use the Glean results to fill in the **Where to Act** column with the most direct contact source found.
+
+Only call Glean for items that genuinely lack a contact source — do not call it for items that already have a Slack URL or clear channel link.
+
 ### 3. Build the Action Table
 
 Produce a Markdown table with these columns:
