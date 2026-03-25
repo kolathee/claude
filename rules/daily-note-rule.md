@@ -27,7 +27,7 @@ Section order (final):
 ## Unplanned vs On the Radar
 
 - **Unplanned** — anything that was not originally planned for the day, regardless of type (investigation, monitoring, ad-hoc requests, etc.). Used to track the volume of unplanned work handled.
-- **On the Radar** — only items that were *planned* to monitor/watch (e.g. a scheduled deployment, a known experiment rollout you're intentionally keeping an eye on).
+- **On the Radar** — only items where all code is merged and no development is needed. These are lightweight monitoring items (e.g. watching an experiment that's already running, a deployment that's already out, a rollout you're keeping an eye on). If a task still needs coding, investigation, code review, or any active development work, it belongs in **Planned Work**, not On the Radar.
 
 If monitoring was triggered by someone asking you unexpectedly → **Unplanned**, not On the Radar.
 

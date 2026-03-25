@@ -74,7 +74,7 @@ Never mix description text and links on the same line. Never concatenate multipl
 
 **Actionable items go to the top, waiting/non-actionable items go to the bottom** — applies to ALL sections (Planned Work, Unplanned, Pending Requests, On the Radar). An item is waiting/non-actionable if it requires confirmation from someone else, is blocked, or has no action you can take right now. Actionable items at the top let you focus immediately on what can be worked on.
 
-**On the Radar time horizon — 1–2 weeks max.** Only keep items in On the Radar if they are expected to be actionable within ~2 weeks. If something will take longer (e.g. "est. next month", "after X which is 3+ weeks away"), drop it from On the Radar entirely until it becomes relevant.
+**On the Radar = code done, just monitoring.** On the Radar is strictly for lightweight items where all code is merged and no development is needed - e.g. watching an experiment that's running, a deployment that's out, a rollout to monitor. If a task still needs coding, investigation, code review, or any active dev work, it belongs in **Planned Work**, not On the Radar. Time horizon: 1–2 weeks max. Drop items beyond that until they become relevant.
 
 **"drop" keyword** — when the user says "drop [item]", remove it from today's daily note and, if it's a work page, move it to the `Backlog/` subfolder and set `Status: On hold`. Add a `[[YYYY-MM-DD]]` Latest Update entry explaining why it was dropped (e.g. "not in this sprint", "timeline too long", "blocked on design"). This is the standard way to deprioritize something.
 
@@ -320,6 +320,13 @@ Locate the relevant sub-section under `### Links` and append the new item.
 
 **Always update `Latest update` frontmatter** whenever adding a new Latest Update entry — replace with a concise one-line summary of what changed (e.g. `Sent MR for review; waiting on BE re data model`).
 
+**Direction-change check:** When a Latest Update entry changes the approach, repo, owner, or requirements (e.g. "fix moves from repo A to repo B", "new approach", "superseded", "direction change"), immediately scan **all** other sections of the page for stale content before finishing:
+- **What's about** → "What to do" and acceptance criteria still accurate?
+- **Implementation Details** → repos, files, steps, toggle, data flow still correct? Mark superseded content as "Previous approach (superseded)" rather than deleting (preserves history).
+- **Testing** → test plan still matches the current approach?
+- **Reference → Links** → any MRs or docs that are no longer the approach? Add a note rather than removing.
+Do this in the same update pass — never add a direction-change Latest Update without also reconciling the rest of the page.
+
 **Sync to today's daily note:** After updating the work page, check today's daily note for any bullet that references the same page (via wikilink `[[Page name]]` or Jira ticket). If found:
 - In **Planned Work** — add a sub-bullet under the task summarising the update. Always linkify MR numbers and Jira tickets (e.g. `- [MR!39784](https://...) ready for review`).
 - In **On the Radar** / **Pending Requests** — update the description sub-bullet to reflect the latest state
@@ -328,6 +335,8 @@ Locate the relevant sub-section under `### Links` and append the new item.
 **Re-sort after status changes to waiting:** If the update makes a task waiting/non-actionable (e.g. the update says "waiting on X", "==waiting==", blocked, or sent for review), also reorder that bullet within its section in today's note — move it to the **bottom** of the section (below all actionable items), following the ordering rule. Do this as part of the same sync step.
 
 The goal is to keep the daily note in sync without requiring a separate `/work t` step.
+
+**Bidirectional sync rule:** This sync works both ways. When updating the **daily note** for a task (e.g. checking it off, adding detail, changing status), also update the **work page** - add a Latest Update entry and update the `Latest` frontmatter. Never update one without the other. The daily note and work page must always reflect the same state.
 
 ### Reformatting an existing work page (shorthand: "f")
 
@@ -388,7 +397,7 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
 6. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones.
 7. **List work:** Look at the **previous daily note's Planned Work** section. For each unchecked task, decide where it goes in the new note:
    - **Planned Work** — task requires active work today (coding, investigation, decision, etc.)
-   - **On the Radar** (`==(Waiting)==`) — task requires no action from me today (e.g. MR out for review, waiting on BE/someone else). Include key links and wiki-link.
+   - **On the Radar** (`==(Monitoring)==`) — code is fully merged, no development needed; just monitoring outcomes (e.g. experiment running, deployment rolled out). Tasks waiting on code review or waiting on others for active dev work stay in **Planned Work** with a `==(Waiting)==` tag, not On the Radar. Include key links and wiki-link.
    Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave the **Continue** section empty (it's filled at end of day).
 8. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
 9. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
@@ -425,7 +434,7 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
 3. **Determine the section** based on context:
    - **Unplanned** — something that already happened today and took time
    - **Pending Requests** — someone asked *me* to do something (review code, set something up, help with a task)
-   - **On the Radar** — *I'm waiting on others* to respond, or an upcoming event/maintenance to monitor; not urgent. Always prefix the title with a highlight category: `==(Waiting)==`, `==(Monitoring)==`, or `==(Blocked)==`. **Before adding here, check all other sections.** If the item already exists anywhere in the note (e.g. already in Planned Work), update that bullet in place instead of duplicating it here.
+   - **On the Radar** — code is fully merged, no development needed; just monitoring outcomes (e.g. experiment running, deployment rolled out, scheduled maintenance). Always prefix the title with `==(Monitoring)==`. If the task still needs coding, investigation, or code review, it goes in Planned Work instead. **Before adding here, check all other sections.** If the item already exists anywhere in the note (e.g. already in Planned Work), update that bullet in place instead of duplicating it here.
    - **Personal** — non-work item (events, appointments, errands). For events with a physical location, include a Google Maps search link: `[Venue Name](https://www.google.com/maps/search/?api=1&query=Venue+Name+City)`. For events with a time, include it in the title (e.g. `Event Name 🎟️ 18:00 – 22:00`).
 4. **Write immediately** — no confirmation needed. Append the bullet to the correct section in today's note using `python3`. Replace the placeholder (`- \n` or `- [ ] \n`) if the section is still empty, otherwise append after the last bullet in that section.
 5. **Report back** with the bullet added and which section it went into.
