@@ -25,6 +25,7 @@ Live in `~/.claude/rules/`:
 | `investment-rules.md` | Investment rules/criteria |
 | `calendar-rule.md` | Always check availability before creating calendar events |
 | `daily-note-rule.md` | Daily note section order and conventions |
+| `update-sync-rule.md` | On any new update: sync work page (Latest frontmatter + Latest Update entry) and daily note bullet |
 
 ## Memory Rules
 - When asked to "remember", "learn", or "don't forget" something, save it to the relevant skill, rules, or context file — **never** to `~/.claude/projects/.../memory/MEMORY.md`.
@@ -38,6 +39,9 @@ Live in `~/.claude/rules/`:
 ## Calendar Rules
 - **Always invoke the `plan-calendar` skill** before any calendar scheduling, rescheduling, or day planning work — before fetching data or touching any events.
 - **Always check current date and time** before scheduling — never assume it's the start of the day.
+
+## Writing Rules
+- **Never use em dashes (—)** in any note, document, or summary. Use a regular hyphen (-) instead.
 
 ## Tool Rules
 - **Slack URLs**: Always use `mcp__plugin_productivity_slack__slack_read_thread` (channel_id + message_ts). Never use Playwright for Slack.
