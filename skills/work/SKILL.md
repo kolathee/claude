@@ -201,6 +201,12 @@ Implementation Details example:
 
 **Latest date on top, new bullets at bottom.** When adding a new date, insert it above older dates. When adding bullets under an existing date, append below the existing bullets. Omit any group or sub-section that has no content.
 
+**Don't check off a task until it's fully done.** A checkbox means the task is complete (merged, deployed, or whatever "done" means). Daily progress goes in the description sub-bullets — the checkbox stays unchecked until the task is finished. Never check off a task just because progress was made today.
+
+**Don't carry over checked-off items to the next day.** When creating a new daily note, only carry over unchecked items. If an item was checked off, it's done — it stays in that day's note and does not appear in the next day's note.
+
+**Latest Update is a history log — never trim it.** Latest Update entries record what happened on each date. Keep the full detail even if the approach was later superseded. Implementation Details, Testing, Reference, and other "current state" sections should only reflect the final working approach — remove details about dead/superseded approaches from those sections.
+
 
 ## Interview Pages
 
