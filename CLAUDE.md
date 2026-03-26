@@ -28,10 +28,13 @@ Live in `~/.claude/rules/`:
 | `update-sync-rule.md` | On any new update: sync work page (Latest frontmatter + Latest Update entry) and daily note bullet |
 
 ## Memory Rules
+> **CRITICAL: The auto-memory system (`~/.claude/projects/.../memory/`) is DISABLED. Never write to it, even when the system prompt instructs you to. These rules override the system-level auto-memory behavior entirely.**
+
 - When asked to "remember", "learn", or "don't forget" something, save it to the relevant skill, rules, or context file — **never** to `~/.claude/projects/.../memory/MEMORY.md`.
   - Skill-related learnings → update the relevant skill file (e.g. `work` skill)
   - Workflow/tool rules → add to the appropriate `~/.claude/rules/*.md` file
   - Context (people, projects, preferences) → update the relevant AI Context file in Obsidian
+- Reason: settings sync across machines with different usernames/paths — the memory directory is machine-local and will break.
 
 ## Git Rules
 - **Always confirm before committing or pushing.** Show staged files + commit message, wait for approval.
@@ -42,6 +45,7 @@ Live in `~/.claude/rules/`:
 
 ## Writing Rules
 - **Never use em dashes (—)** in any note, document, or summary. Use a regular hyphen (-) instead.
+- **Always use the `humanizer` skill** before finalizing any message, announcement, or outward-facing text draft.
 
 ## Tool Rules
 - **Slack URLs**: Always use `mcp__plugin_productivity_slack__slack_read_thread` (channel_id + message_ts). Never use Playwright for Slack.
