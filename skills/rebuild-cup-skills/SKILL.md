@@ -15,7 +15,7 @@ Run this bash block exactly as written — it is self-contained and needs no ext
 set -e
 
 SKILLS_SRC="$HOME/.claude/skills"
-OUTPUT="$HOME/cup-skills.plugin"
+OUTPUT="$HOME/cup-skills.zip"
 TMP_DIR=$(mktemp -d)
 PLUGIN_DIR="$TMP_DIR/cup-skills"
 
@@ -44,12 +44,12 @@ for skill_dir in "$SKILLS_SRC"/*/; do
 done
 
 cd "$PLUGIN_DIR"
-zip -r /tmp/cup-skills.plugin . -x "*.DS_Store" > /dev/null
-cp /tmp/cup-skills.plugin "$OUTPUT"
-rm -rf "$TMP_DIR" /tmp/cup-skills.plugin
+zip -r /tmp/cup-skills.zip . -x "*.DS_Store" > /dev/null
+cp /tmp/cup-skills.zip "$OUTPUT"
+rm -rf "$TMP_DIR" /tmp/cup-skills.zip
 
 echo ""
-echo "✅ cup-skills.plugin rebuilt with $COUNT skills → $OUTPUT"
+echo "✅ cup-skills.zip rebuilt with $COUNT skills → $OUTPUT"
 ```
 
 After running, report:
