@@ -92,6 +92,12 @@ After saving, tell the user:
 - Sequences → `sequenceDiagram`
 - State transitions → `stateDiagram-v2`
 
+**Mermaid node label line breaks:** Use `<br/>` — NOT `\n`. Using `\n` renders literally as text.
+```
+✅ A["Line 1<br/>Line 2"]
+❌ A["Line 1\nLine 2"]
+```
+
 **Use tables for:**
 - Quick comparisons (e.g., GET vs POST, SQL vs NoSQL)
 - Key-value references (e.g., HTTP codes, command cheatsheets)
