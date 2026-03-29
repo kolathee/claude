@@ -1,12 +1,6 @@
 ---
 name: explore-and-implement
-description: >-
-  Guided codebase exploration and implementation for cross-service requirements.
-  Use when the user says "explore", "trace the flow", "where do I need to change",
-  "figure out how this works", "I have new requirements", or presents a task
-  where the affected code/services are unclear. Emphasizes understanding before
-  implementation — the user must understand how the system works before any code
-  changes are made.
+description: Guided codebase exploration and implementation for cross-service requirements. Use when the user says "explore", "trace the flow", "where do I need to change", "figure out how this works", "I have new requirements", or presents a task where the affected code/services are unclear. Emphasizes understanding before implementation — the user must understand how the system works before any code changes are made.
 ---
 
 # Explore and Implement
