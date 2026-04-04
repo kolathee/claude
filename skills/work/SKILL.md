@@ -1,6 +1,6 @@
 ---
 name: work
-description: Create or update Obsidian work pages for tasks in the Agoda Workspace folder. Use when the user says "create a work page", "add a work page", "update work page", "log update to work page", "new task page", "add last update", "add MR to work page", "add Jira to work page", or mentions creating/editing a task page in the current H1/H2 workspace. Also use when formatting or fixing an existing work page to follow the work template. Shorthand triggers — "c" = create work page, "u" = update work page, "f" = reformat work page, "n" = note (create daily note), "e" = end (update today's daily note), "t" = track (add a checkbox item to today's note from a Slack thread or image).
+description: Create or update Obsidian work pages for tasks in the Agoda Workspace folder. Use when the user says "create a work page", "add a work page", "update work page", "log update to work page", "new task page", "add last update", "add MR to work page", "add Jira to work page", or mentions creating/editing a task page in the current H1/H2 workspace. Also use when formatting or fixing an existing work page to follow the work template. Shorthand triggers — "c" = create work page, "u <topic>" = update specific work page, "u" (no topic) = sync all tasks in today's daily note from Slack, "f" = reformat work page, "n" = note (create daily note), "e" = end (update today's daily note), "t" = track (add a checkbox item to today's note from a Slack thread or image).
 ---
 
 # Work Page Skill
@@ -65,10 +65,12 @@ Daily notes live in a separate folder and use a different template.
 **Universal bullet format (applies to ALL sections):** Every item follows the same order:
 1. **Title** — short and concise (e.g. `(BWZP) iOS SSR badge`, `Pending Int + Deint`). Never a full sentence.
 2. **Description / detail text** — sub-bullets explaining what/why
-3. **Links** (Jira, Slack, doc, etc.) — each on its own sub-bullet
+3. **Links** — MR, Slack thread, and Jira ticket go on **one sub-bullet, comma-separated**. Standalone doc/Confluence links each get their own sub-bullet.
 4. **Wiki-links `📄 [[Page]]`** — always last, each on its own sub-bullet
 
-Never mix description text and links on the same line. Never concatenate multiple references on one line.
+**Link grouping rule:** Keep MR + Slack thread + Jira on one line, comma-separated. Example:
+`- [MR!5179](url), [💬 Thread](url), [🎫 PAYFLEX-352](url)`
+Never split these three across separate lines. Doc/Confluence/RFC links stay on their own lines since they are reference material, not the primary action links.
 
 **Planned Work section:** The first section in the note — starts right after the Day line. Heading is **Planned Work** (not "Work"). Each task uses `- [ ] **Task name**` (checkbox + bold title). List **In progress** tasks first (including items carried forward from the previous day's "Continue" section); then **Next** tasks with a sub-bullet note *Next (when in-progress tasks are done)*.
 
@@ -80,14 +82,15 @@ Never mix description text and links on the same line. Never concatenate multipl
 
 **Highlight action verbs with `==verb==`** in ALL sections — in the description sub-bullet and in the title if the verb appears there. Examples: `==Relaunch==`, `==Waiting==`, `==Start==`, `==Follow up==`, `==Review==`, `==Ask==`, `==Merge==`, `==Close==`. This helps scan tasks at a glance. Example:
 - [ ] **(BWZP) iOS SSR badge**
-	- [PAYFLEX-233](https://...)
+	- ==Waiting== for BE to confirm data model
+	- [MR!1234](https://...), [💬 Thread](https://...), [🎫 PAYFLEX-233](https://...)
 	- 📄 [[(BWZP) iOS SSR badge]]
 - [ ] **Pending Int + Deint**
 	- List bugs/int/deint exps for iOS & Android.
 	- 📄 [[Pending Int + Deint]]
 - [ ] **(BWZP) iOS MMB CTA**
 	- Next (when in-progress tasks are done)
-	- [PAYFLEX-349](https://...)
+	- [🎫 PAYFLEX-349](https://...)
 	- 📄 [[(BWZP) iOS MMB CTA]]
 
 **Unplanned section:** A top-level `# ⚡ **Unplanned**` section sits between Planned Work and Personal. Add it only when there are actual unplanned items; omit if empty. Each item uses `- [ ] **Title**` (checkbox + bold title), then sub-bullets for detail/links. Example:
@@ -291,6 +294,15 @@ with open(workspace + filename, 'w') as f:
 
 ### Updating an existing work page (shorthand: "u")
 
+**Workflow when user provides only a topic/title:**
+
+1. **Find the page** — search `Agoda/<Quarter>/` (and subfolders) for a file matching the topic keywords. Open it.
+2. **Auto-fetch Slack threads** — scan the entire page (Latest Update, Reference → Links, and all sub-bullets) for any Slack URLs in the format `https://agoda.slack.com/archives/{channel_id}/p{ts}`. For each one found, call `mcp__plugin_productivity_slack__slack_read_thread` with the extracted `channel_id` and `message_ts` (strip the leading `p`, insert a `.` after the 10th digit). Fetch all threads in parallel.
+3. **Summarise what's new** — from each thread, identify the most recent messages since the last Latest Update entry date. Note any decisions, replies, blockers, or action items.
+4. **Ask the user what to update** — present a one-line summary of what's new in each thread, then ask what they want to record (or proceed directly if they already told you).
+
+This means the user only needs to say `u (topic name)` — no need to paste Slack links manually.
+
 **Adding a Latest Update entry** (most common update):
 ```python
 # Quarter = computed from current date (e.g. 2026 H1)
@@ -333,16 +345,61 @@ Locate the relevant sub-section under `### Links` and append the new item.
 - **Reference → Links** → any MRs or docs that are no longer the approach? Add a note rather than removing.
 Do this in the same update pass — never add a direction-change Latest Update without also reconciling the rest of the page.
 
-**Sync to today's daily note:** After updating the work page, check today's daily note for any bullet that references the same page (via wikilink `[[Page name]]` or Jira ticket). If found:
-- In **Planned Work** — add a sub-bullet under the task summarising the update. Always linkify MR numbers and Jira tickets (e.g. `- [MR!39784](https://...) ready for review`).
-- In **On the Radar** / **Pending Requests** — update the description sub-bullet to reflect the latest state
-- If no reference exists in the daily note, skip silently (do not add one)
+**Sync to today's daily note (MANDATORY):** After updating the work page, ALWAYS update today's daily note. Check for any bullet that references the same page (via wikilink `[[Page name]]` or Jira ticket):
+- **If a reference exists:**
+  - In **Planned Work** — add a sub-bullet under the task summarising the update. Always linkify MR numbers and Jira tickets (e.g. `- [MR!39784](https://...) ready for review`).
+  - In **On the Radar** / **Pending Requests** — update the description sub-bullet to reflect the latest state.
+- **If no reference exists:** add a new bullet in the appropriate section (Planned Work if active, On the Radar if monitoring-only) using the standard format. Never skip this step.
 
 **Re-sort after status changes to waiting:** If the update makes a task waiting/non-actionable (e.g. the update says "waiting on X", "==waiting==", blocked, or sent for review), also reorder that bullet within its section in today's note — move it to the **bottom** of the section (below all actionable items), following the ordering rule. Do this as part of the same sync step.
 
 The goal is to keep the daily note in sync without requiring a separate `/work t` step.
 
 **Bidirectional sync rule:** This sync works both ways. When updating the **daily note** for a task (e.g. checking it off, adding detail, changing status), also update the **work page** - add a Latest Update entry and update the `Latest` frontmatter. Never update one without the other. The daily note and work page must always reflect the same state.
+
+### Update All — Full daily note Slack sync (shorthand: "u" with no topic)
+
+**Trigger:** User says just `u` with no topic or title after it.
+
+**Purpose:** Read today's daily note, find every task that has a Slack thread URL, fetch the latest messages, and update both the daily note bullets and their linked work pages in one pass. No manual link pasting needed.
+
+**Workflow:**
+
+1. **Get today's date** — run `date +%Y-%m-%d`. Open today's daily note at `Daily Note/YYYY-MM-DD.md`.
+
+2. **Collect all tasks** — scan every section (Planned Work, Unplanned, On the Radar) for **all** task bullets — both unchecked `- [ ]` and checked `- [x]`. For each one, collect:
+   - The task title
+   - All sub-bullets (description, links, wiki-links)
+   - Any Slack URLs in the format `https://agoda.slack.com/archives/{channel_id}/p{ts}`
+   - Any `📄 [[Page name]]` wiki-links (points to a work page)
+
+3. **Fetch all Slack threads in parallel** — for every Slack URL found across all tasks, call `mcp__plugin_productivity_slack__slack_read_thread` (extract `channel_id` and `message_ts`: strip leading `p`, insert `.` after 10th digit). Fire all fetches at the same time.
+
+4. **Determine what's new per task** — for each task that has a linked work page (`📄 [[Page]]`), find the date of the last `📄 [[YYYY-MM-DD]]` entry in the work page's Latest Update section. Treat any Slack messages after that date as "new". For tasks with no work page, compare against yesterday's date.
+
+5. **Update each task** — for every task that has new Slack activity:
+
+   **If the task has a linked work page:**
+   - Add a `📄 [[today]]` Latest Update entry on the work page summarising what's new (decisions, replies, blockers, action items)
+   - Update the `Latest` frontmatter with a one-line summary
+   - Update the description sub-bullet on the daily note to reflect the latest state (e.g. change `==Waiting==` text, add new context)
+
+   **If no work page exists (e.g. MR review tracked only in daily note):**
+   - Update the description sub-bullet on the daily note only
+
+   **If no new Slack activity** — leave both the daily note and work page unchanged for that task. Note it in the summary.
+
+6. **Re-sort if needed** — after updates, if any task's status changed to waiting/blocked, move it to the bottom of its section in the daily note (below actionable items), per the actionable-first ordering rule.
+
+7. **Report back** with a summary table:
+
+   | Task | New activity | Updated |
+   |------|-------------|---------|
+   | (BWZP) Block SecureLink | Lalit replied — scope confirmed, no Wizard UI needed | Work page + daily note |
+   | Re-review MR!499 | No new activity | - |
+   | Kill switch FMS | Harshit asked for config example | Work page + daily note |
+
+   List tasks with no Slack URL as "No Slack thread — skipped".
 
 ### Reformatting an existing work page (shorthand: "f")
 
@@ -399,12 +456,16 @@ Create a **new daily note for today** under the Daily Note folder. Use the Daily
    Archive any previous notes still in the top-level `Daily Note/` folder (move to `Daily Note/Archive/`). Then stop — do not proceed to steps 3–9.
 3. **Read the Daily Template** to get the exact structure (Day, Planned Work, Pending Requests, On the Radar, Personal, End-of-Day Review). Use **bullets** for End-of-Day Review (not numbered lists).
 4. **Carry-forward into Planned Work:** Find the **latest existing weekday daily note** before the target date. To do this: list all `YYYY-MM-DD.md` files in both `Daily Note/` and `Daily Note/Archive/`, filter to dates < target date that fall on weekdays (Mon–Fri), then pick the most recent one. It may not be "yesterday" — e.g. if today is Monday, the latest weekday note could be Thursday or Wednesday (if Friday's note doesn't exist). Read that note's **Continue** section (titled "Continue tomorrow", "Continue on Monday", or similar). Those bullets go directly into **Planned Work** in the new note. If no previous weekday note exists, start Planned Work from work board status only. Apply the universal bullet format: **bold title** on the first line, description/action as a sub-bullet, then links, then wiki-link — never put description or action on the same line as the title.
+
+   **CRITICAL — preserve every reference without exception:** When copying any bullet (from Continue, Planned Work, On the Radar, or Pending Requests), carry over **all** sub-bullets verbatim — every Slack thread link, every Jira ticket, every MR link, every Confluence/doc link, every wiki-link `📄 [[Page]]`. Never summarise, merge, or drop any sub-bullet. If a bullet had 5 sub-bullets in the source note, the new note must have exactly 5. Missing references force the user to manually re-attach them later — this is the most common carry-forward mistake to avoid.
+
 5. **Archive the previous note:** After reading the previous daily note (from step 4), move it into the `Daily Note/Archive/` folder. This keeps the main `Daily Note/` folder clean — only the current day's note lives at the top level. Also archive any other notes still at the top level (e.g. weekend notes).
-6. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones.
+6. **Carry over unchecked sections:** From the previous daily note, copy any unchecked () items from **📬 Pending Requests** and **👀 On the Radar** sections into the new note (same sections, same content). Only carry items that are still unchecked — skip completed () ones. Apply the same **preserve every reference** rule: copy all sub-bullets exactly as they appear — Slack links, Jira tickets, MR links, doc links, wiki-links — nothing dropped.
 7. **List work:** Look at the **previous daily note's Planned Work** section. For each unchecked task, decide where it goes in the new note:
-   - **Planned Work** — task requires active work today (coding, investigation, decision, etc.)
+   - **Planned Work (active)** — task requires active work today (coding, investigation, decision, etc.)
+   - **Planned Work (Next - keep as-is)** — if a task had a sub-bullet containing "Next (when in-progress tasks are done)", carry it forward **exactly as it was** with the same "Next" sub-bullet. **Do NOT promote it to an active task.** Never reclassify a "Next" item as active; the user will move it manually when ready.
    - **On the Radar** (`==(Monitoring)==`) — code is fully merged, no development needed; just monitoring outcomes (e.g. experiment running, deployment rolled out). Tasks waiting on code review or waiting on others for active dev work stay in **Planned Work** with a `==(Waiting)==` tag, not On the Radar. Include key links and wiki-link.
-   Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)*. Leave the **Continue** section empty (it's filled at end of day).
+   Also scan `Agoda/<Quarter>/*.md` for any `Status: In progress` tasks not already covered. Then list **Next** tasks (from work pages with `Status: Next`) in Planned Work with a sub-bullet *Next (when in-progress tasks are done)* — only if they are not already in the note. Leave the **Continue** section empty (it's filled at end of day).
 8. **No duplicates across sections.** An item must appear in exactly one section across the entire note — Planned Work, Unplanned, Pending Requests, On the Radar, Personal. If an item already exists anywhere in the note, update it in place rather than adding it to another section.
 9. **Create the note:** Write `YYYY-MM-DD.md` using the template. Fill **Day** with the weekday. **Planned Work:** active tasks + Next tasks. **On the Radar:** passive/waiting tasks from previous Planned Work + carried-over On the Radar items. Leave **Personal** empty for the user to fill. **Do NOT include End-of-Day Review or Personal Review sections** — these are added only during `e` (end-of-day) mode.
 10. **Monday check:** If today is Monday, add the following as the **first item** in Planned Work (before all other tasks):
