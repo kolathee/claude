@@ -140,19 +140,20 @@ Use this template:
 
 ### Step 5: Save to Obsidian Books Folder
 
-Write the full markdown summary to:
+Before saving, **always check existing subfolders** in the Books directory:
 
-```
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Books/[Book Title] - SUMMARY.md
-```
-
-Create the directory if it doesn't exist:
 ```bash
-mkdir -p ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/CupOb/Books
+ls ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/CupOb/Books/
+```
+
+Pick the most fitting existing subfolder based on the book's genre/topic. Only create a new subfolder if none of the existing ones are a reasonable match. Then write the full markdown summary to:
+
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Books/[Subfolder]/[Book Title] - SUMMARY.md
 ```
 
 Use the Write tool to save the file. The filename format is:
-- `[Book Title] - SUMMARY.md` — e.g., `Atomic Habits - SUMMARY.md`
+- `[Book Title].md` — e.g., `Atomic Habits.md`
 
 After saving, confirm to the user with the full file path.
 
@@ -206,5 +207,5 @@ After saving, confirm to the user with the full file path.
 2. **Analyze** — map the book's structure before writing
 3. **Extract** — chapter summaries, key ideas, quotes, themes
 4. **Format** — use the markdown template above, adapted for the genre
-5. **Save** — write to `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Books/[Book Title] - SUMMARY.md`
+5. **Save** — check existing subfolders in `Books/`, pick the best fit (or create new if none match), write to `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Books/[Subfolder]/[Book Title].md`
 6. **Confirm** — tell the user the file path and offer to refine anything
