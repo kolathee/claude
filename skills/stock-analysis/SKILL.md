@@ -310,7 +310,7 @@ Full output from all 8 steps in order, each under its own `###` heading (one lev
 Add the checklist at the very end of the note (after Section 2). Populate it as follows:
 
 - **Assess for All Phases**: leave all checkboxes empty — the user fills these in after reading
-- **Key Metrics by Business Phase**: use the phase from Step 1. In the Phase Criteria Match table: non-matching cells show the criterion label + the threshold/range that defines that phase in parentheses (e.g. `Fast (>20%)`); the matching phase cells get ✅ in front + the company's actual number (e.g. `✅ Slow (6.65% 3YR CAGR, +4.3% YoY)`). Only the matching cell shows the real company number — all others show the phase definition range. Keep ONLY the metrics block for that phase — delete all other phase blocks. **Auto-fill the metric scores from Step 5**: for each metric row, replace `- [ ]` in the matching column with `- ` + the color emoji (🔴, 🟡, or 🟢) followed by the label text — e.g. `- 🟡 Between 5% and 10%`. Leave the non-matching cells as `- [ ]`. Do not leave any metric row blank — all must be pre-filled.
+- **Key Metrics by Business Phase**: use the phase from Step 1. In the Phase Criteria Match table: non-matching cells show the criterion label + the threshold/range that defines that phase in parentheses (e.g. `Fast (>20%)`); the matching phase cells get ✅ in front + the company's actual number (e.g. `✅ Slow (6.65% 3YR CAGR, +4.3% YoY)`). Only the matching cell shows the real company number — all others show the phase definition range. Keep ONLY the metrics block for that phase — delete all other phase blocks. **Auto-fill the metric scores from Step 5**: for each metric row, replace `- [ ]` in the matching column with `- ` + the color emoji (🔴, 🟡, or 🟢) + the actual company value + the threshold in parentheses — e.g. `- 🟡 6.65% (5-10%)` or `- 🔴 41.2% (<50%)` or `- 🟢 57x (>5x)`. For the Capital Returns row, always specify the type — e.g. `- 🟢 Dividend — 24.5 yrs, 5.32% yield` or `- 🟢 Buyback — $2B/yr, 5 yrs`. Leave the non-matching cells as `- [ ]`. Do not leave any metric row blank — all must be pre-filled.
 - **Assess Risk**: leave empty — user fills in based on their read of Step 7
 - **Assess Valuation**: fill in the current P/E and P/FCF values from the financial data. For sector median, use training knowledge or flag with ⚠️ if unknown. Leave checkboxes empty.
 - **Are You Interested?**: leave empty — this is the user's final verdict
@@ -411,6 +411,7 @@ Tell the user:
 | Revenue | None/Small ([actual]) | Fast ([actual]) | Fast ([actual]) | Medium ([actual]) | ✅ Slow ([actual]) | Decline ([actual]) |
 | Op Profit | Neg & Growing ([actual]) | Neg & Shrinking ([actual]) | Near Zero ([actual]) | Fast ([actual]) | ✅ Slow ([actual]) | Declining ([actual]) |
 | Div/Buyback | No | No | No | No | ✅ Yes ([actual]) | Yes ([actual]) |
+| Key Question | Can we find product/market fit? | Is this business sustainable? | Can we scale? | Can we maximize profits? | Can we reward investors? | Can we turn things around? |
 
 *Copy from Step 1 output. Non-matching cells: show the phase's definition threshold (e.g. `Fast (>20%)`). Matching cell: ✅ + actual company number.*
 

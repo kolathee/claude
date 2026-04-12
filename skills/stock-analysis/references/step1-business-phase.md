@@ -34,6 +34,7 @@ Return your answer using EXACTLY this format:
 | Revenue | None/Small | Fast | Fast | Medium | Slow | Decline |
 | Op Profit | Neg & Growing | Neg & Shrinking | Near Zero | Fast | Slow | Decline |
 | Div/Buyback | No | No | No | No | Yes | Yes |
+| Key Question | Can we find product/market fit? | Is this business sustainable? | Can we scale? | Can we maximize profits? | Can we reward investors? | Can we turn things around? |
 
 For non-matching phase columns: show the threshold/range that DEFINES that phase in parentheses — this tells the reader what a company needs to qualify for that phase.
 For the matching phase column: put ✅ in front AND show the company's actual number in parentheses.
@@ -45,6 +46,7 @@ Example for a P5 company (BDMS):
 | Revenue | None/Small (<5% or 0) | Fast (>20%) | Fast (>20%) | Medium (10-20%) | ✅ Slow (6.65% 3YR CAGR, +4.3% YoY) | Decline (<0%) |
 | Op Profit | Neg & Growing (loss ↑) | Neg & Shrinking (loss ↓) | Near Zero (~0%) | Fast (rapid growth ↑) | ✅ Slow (16% op margin, EPS flat 1.00 THB TTM) | Declining (↓) |
 | Div/Buyback | No | No | No | No | ✅ Yes (5.32% yield, 0.80 THB/yr, 24+ consecutive years) | Yes (at risk) |
+| Key Question | Can we find product/market fit? | Is this business sustainable? | Can we scale? | Can we maximize profits? | **Can we reward investors?** | Can we turn things around? |
 
 ---
 
