@@ -234,26 +234,46 @@ width: 70%
 beginAtZero: true
 ```
 
-**Bar chart example (financial scorecard):**
+**Bar chart example (financial scorecard) — color each bar by its score:**
 ```chart
 type: bar
 labels: [Revenue CAGR, FCF/NI, ROIC, Capital Returns, EBIT Cover]
 series:
   - title: Score (3=Green, 2=Yellow, 1=Red)
     data: [2, 3, 2, 3, 3]
+    backgroundColor:
+      - rgba(234, 179, 8, 0.85)
+      - rgba(34, 197, 94, 0.85)
+      - rgba(234, 179, 8, 0.85)
+      - rgba(34, 197, 94, 0.85)
+      - rgba(34, 197, 94, 0.85)
 width: 80%
 beginAtZero: true
 ```
 
-**Pie chart example (revenue mix):**
+Color reference for score-based bars:
+- 🟢 Score 3 (Strong/Green): `rgba(34, 197, 94, 0.85)`
+- 🟡 Score 2 (Moderate/Yellow): `rgba(234, 179, 8, 0.85)`
+- 🔴 Score 1 (Weak/Red): `rgba(239, 68, 68, 0.85)`
+
+Always add `backgroundColor` to every chart — never leave it unset.
+
+**Pie/doughnut chart example (revenue mix) — always include backgroundColor:**
 ```chart
-type: pie
+type: doughnut
 labels: [Net Interest Income, Fee Income, Wealth Mgmt, Other]
 series:
   - title: Revenue Mix FY[YEAR]
     data: [70, 15, 12, 3]
+    backgroundColor:
+      - rgba(37, 99, 235, 0.85)
+      - rgba(16, 185, 129, 0.85)
+      - rgba(139, 92, 246, 0.85)
+      - rgba(251, 146, 60, 0.85)
 width: 60%
 ```
+
+For pie/doughnut charts, always add `backgroundColor` with one rgba color per slice — otherwise all slices render the same color. Add more colors as needed for additional slices.
 
 ---
 
