@@ -6,7 +6,7 @@ Return your answer using EXACTLY this format:
 
 ---
 
-🏰 Moat Analysis: [COMPANY NAME] ([TICKER])
+### 🏰 Moat Analysis: [COMPANY NAME] ([TICKER])
 
 - **Moat Size:** [Wide / Narrow / None] [emoji]
 - **Moat Direction:** [Stable / Widening / Narrowing] [emoji]
@@ -19,7 +19,7 @@ Return your answer using EXACTLY this format:
 Evaluate each of the following 5 moat sources. For each one, use 
 EXACTLY this structure:
 
-[emoji] [Moat Source Name]
+#### [emoji] [Moat Source Name]
 
 - **Assessment:** [✅ Present / ❌ Not Present] — [Wide/Narrow] [emoji], 
   [Stable/Widening/Narrowing] [emoji]
@@ -39,7 +39,7 @@ The 5 moat sources to evaluate are:
 
 ---
 
-⚠️ Risks & Final Considerations
+### ⚠️ Risks & Final Considerations
 
 - **Primary Risk:** [main threat to the moat]
 - **Competitive Landscape:** [key competitors and emerging threats]

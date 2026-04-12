@@ -13,15 +13,15 @@ Produce a comprehensive 8-step investment research report for any publicly trade
 ## Obsidian Save Path
 
 ```
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/Stock Analysis/[Company Name]/[Company Name] - Stock Analysis.md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/Stock Analysis/[Company Name] - Stock Analysis.md
 ```
 
 Example:
 ```
-.../Stock Analysis/Apple/Apple - Stock Analysis.md
+.../Stock Analysis/Apple - Stock Analysis.md
 ```
 
-Create the company folder if it doesn't exist. Use the `Write` tool to save.
+Save directly under the Stock Analysis folder — do NOT create a subfolder. Use the `Write` tool to save.
 
 ---
 
@@ -30,6 +30,121 @@ Create the company folder if it doesn't exist. Use the `Write` tool to save.
 ### Step 0: Confirm the company
 
 If only a ticker is given, confirm the full company name before proceeding. If both are given, proceed immediately.
+
+### Research Pass (before Step 1)
+
+**Step A: Run the data fetcher script first.**
+
+```bash
+python ~/.claude/skills/stock-analysis/scripts/fetch_stock_data.py <TICKER>
+```
+
+- Ticker format: Thai SET → `SCB.BK`, US → `AAPL`, SGX → `D05.SI`, Vietnam → `VIC.VN`, HK → `9988.HK`
+- This produces a JSON with real-time price, valuation, margins, ROE, dividends, EPS history, analyst consensus, management, and SET index comparison
+- Read the JSON output before starting any step — it is your primary data source
+- Fields that are `null` were unavailable from yfinance — fall back to training knowledge for those and flag with ⚠️
+
+**What the script covers (use these directly, no web fetching needed):**
+
+| Field | JSON path |
+|-------|-----------|
+| Price, 52w range, MAs | `price.*` |
+| P/BV, P/E, EPS | `valuation.*` |
+| Revenue, Net Income, OCF | `financials_ttm.*` |
+| ROE, ROA, margins | `profitability.*` |
+| Revenue/earnings growth YoY | `growth_yoy.*` |
+| Dividend yield, history, payout | `dividends.*` |
+| EPS 4-year history + 3YR CAGR | `earnings_history.*`, `derived.eps_3yr_cagr_pct` |
+| FCF/NI, dividend coverage | `derived.*` |
+| Analyst target, recommendation | `analyst_consensus.*` |
+| C-suite officer list | `management.*` |
+| Insider/institutional ownership | `ownership.*` |
+| 1Y price change, volume | `price_1y.*` |
+| vs SET/index return | `market_comparison.*` |
+
+**Step B: Run the annual report fetcher.**
+
+```bash
+python ~/.claude/skills/stock-analysis/scripts/fetch_annual_report.py <TICKER>
+```
+
+This downloads and extracts narrative sections from the official annual report:
+
+| Section key | Contains | Used in |
+|-------------|----------|---------|
+| `ceo_letter` | Chairman/CEO letter — tone, priorities, strategic framing | Step 2 (Management) |
+| `business_overview` | What the company does, products, customers | Step 3 (Business) |
+| `mda` | Management commentary on performance, trends, outlook | Step 5 & 6 |
+| `corporate_governance` | Board structure, independence, committees | Step 2 (Governance) |
+| `risk_factors` | What management formally discloses as risks | Step 7 (Risks) |
+| `esg_sustainability` | ESG commitments, social/environmental disclosures | Step 3 |
+| `auditor_report` | Going concern flags, key audit matters | Step 5 |
+
+Sources by exchange:
+- **US (NYSE/NASDAQ)**: SEC EDGAR 10-K parsed directly — Item 1 (Business), Item 1A (Risks), Item 7 (MD&A)
+- **US ADR (foreign company listed on US exchanges)**: SEC EDGAR 20-F — Item 4 (Business), Item 3D (Risks), Item 5 (MD&A)
+- **Thailand (SET), Singapore (SGX), Vietnam (VSE/HNX), HK, others**: PDF downloaded from company IR page
+
+Results are cached at `~/.claude/skills/stock-analysis/cache/{TICKER}_{YEAR}_annual_report.json` — re-running is instant.
+
+If PDF not found automatically: `python fetch_annual_report.py --pdf /path/to/report.pdf --ticker <TICKER>`
+
+**Step C: Data Availability Report — show this to the user and WAIT for confirmation before proceeding.**
+
+After running both scripts, compile a data availability report and present it to the user. Do NOT start the 8-step analysis until the user confirms they want to proceed (or provides additional documents).
+
+Format the report exactly like this:
+
+---
+
+**Data Availability Report - [COMPANY NAME] ([TICKER])**
+
+**Financial Data (yfinance)**
+
+| Field | Status | Notes |
+|-------|--------|-------|
+| Price & Valuation (P/E, P/BV, EPS) | ✅ / ⚠️ | |
+| Profitability (ROE, margins) | ✅ / ⚠️ | |
+| Revenue & Net Income (TTM) | ✅ / ⚠️ | |
+| EPS History (3-4 year CAGR) | ✅ / ⚠️ | |
+| Dividend history | ✅ / ⚠️ | |
+| Analyst consensus | ✅ / ⚠️ | |
+
+Mark ✅ if the field has actual data, ⚠️ if all or most values are null (will fall back to training knowledge).
+
+**Annual Report Sections**
+
+| Section | Status | Affects |
+|---------|--------|---------|
+| CEO/Chairman Letter | ✅ Found / ❌ Missing | Step 2 (Management tone, priorities) |
+| Business Overview | ✅ Found / ❌ Missing | Step 3 (Business model, products) |
+| MD&A | ✅ Found / ❌ Missing | Step 5 (Financial commentary), Step 6 (Outlook) |
+| Corporate Governance | ✅ Found / ❌ Missing | Step 2 (Board structure) |
+| Risk Factors | ✅ Found / ❌ Missing | Step 7 (Formal risk disclosures) |
+| ESG/Sustainability | ✅ Found / ❌ Missing | Step 3 (ESG profile) |
+| Auditor Report | ✅ Found / ❌ Missing | Step 5 (Going concern flags) |
+
+**Overall Readiness**
+
+Choose one:
+- **Ready** — sufficient data to run all 8 steps with high confidence
+- **Partial** — X of 7 annual report sections found; steps Y and Z will rely on training knowledge ⚠️
+- **Limited** — annual report PDF not found; all narrative steps will rely on training knowledge ⚠️
+
+**How to improve coverage** (only show if sections are missing):
+- To provide the annual report manually: `python ~/.claude/skills/stock-analysis/scripts/fetch_annual_report.py --pdf /path/to/report.pdf --ticker <TICKER>`
+- Clear cache and retry: `python ... --no-cache <TICKER>`
+- For Vietnamese/HK companies: download the annual report PDF from the company's IR page and use `--pdf`
+
+---
+
+After presenting the report, ask: **"Shall I proceed with the full analysis, or would you like to provide any missing documents first?"**
+
+Only continue to the 8-step analysis once the user confirms to proceed.
+
+**Step D: Fetch 1-2 web sources for what neither script provides** — bank-specific metrics (NIM, NPL ratio, CAR, AUM) and recent news. Max 3 fetches total. Fall back to training knowledge for anything blocked. Do this after the user confirms to proceed.
+
+Do NOT spawn background research agents for a single-company analysis. Run everything inline.
 
 ### Step 1-8: Run all analysis steps
 
@@ -54,9 +169,78 @@ Read each reference file below and follow its exact output format. Run all steps
 - Any governance controversies or red flags
 - Capital allocation philosophy
 
-### Visualizations (optional but encouraged)
+### Visualizations (required for these 4 sections)
 
-Where data lends itself to it, use Obsidian-Charts plugin syntax or Mermaid to add a bar chart, table, or pie chart. Large numbers are easier to compare visually than in prose. Good candidates: revenue breakdown by segment, phase criteria match, financial scorecard, risk matrix.
+Two charting tools are available — use whichever fits the chart type best. Do not skip charts — they make the report dramatically easier to scan.
+
+---
+
+#### Tool 1: Obsidian Charts plugin
+
+Best for: bar charts, pie/doughnut, line trends, radar. Richer visual output than Mermaid for data charts.
+
+```chart
+type: pie          ← options: bar, line, pie, doughnut, polarArea, radar
+labels: [Label1, Label2, Label3]
+series:
+  - title: My Data
+    data: [70, 20, 10]
+width: 70%
+beginAtZero: true
+```
+
+**Bar chart example (financial scorecard):**
+```chart
+type: bar
+labels: [Revenue CAGR, FCF/NI, ROIC, Capital Returns, EBIT Cover]
+series:
+  - title: Score (3=Green, 2=Yellow, 1=Red)
+    data: [2, 3, 2, 3, 3]
+width: 80%
+beginAtZero: true
+```
+
+**Pie chart example (revenue mix):**
+```chart
+type: pie
+labels: [Net Interest Income, Fee Income, Wealth Mgmt, Other]
+series:
+  - title: Revenue Mix FY[YEAR]
+    data: [70, 15, 12, 3]
+width: 60%
+```
+
+---
+
+#### Tool 2: Mermaid
+
+Best for: quadrant charts (risk maps), flow diagrams, anything structural.
+
+**Quadrant chart example (risk map):**
+```mermaid
+quadrantChart
+    title Risk Map — Severity vs Trend
+    x-axis Improving --> Worsening
+    y-axis Low Severity --> High Severity
+    Concentration: [0.4, 0.5]
+    Disruption: [0.7, 0.6]
+    Outside Forces: [0.4, 0.6]
+    Competition: [0.5, 0.4]
+```
+
+---
+
+**Required charts per section:**
+
+| Section | Chart Type | Tool |
+|---------|-----------|------|
+| Step 3 - Revenue breakdown | Pie or doughnut by revenue segment | Obsidian Charts |
+| Step 3 - Geographic split | Pie by region | Obsidian Charts |
+| Step 5 - Financial scorecard | Bar showing metric scores | Obsidian Charts |
+| Step 6 - Growth drivers | Pie or bar showing driver strengths | Obsidian Charts |
+| Step 7 - Risk matrix | Quadrant (Severity × Trend) | Mermaid |
+
+Add more charts wherever numbers benefit from visual comparison (moat scores, loan book composition, customer segment split, etc.).
 
 ### Step 9: Assemble the final note
 
@@ -146,15 +330,27 @@ Save to the Obsidian path above. Tell the user:
 ## Data Sources
 
 Use web search and public sources. Prioritize:
-- SEC EDGAR (10-K, 10-Q, proxy statements)
-- Company investor relations pages
+- Company investor relations pages (annual reports, quarterly press releases)
+- SEC EDGAR or local exchange filings (SET for Thai stocks, SGX for Singapore, etc.)
 - MacroTrends, GuruFocus for historical financial data
 - Morningstar for moat ratings
 - Yahoo Finance / MarketBeat for price/sentiment data
 - TipRanks for analyst consensus
 - Recent news (Reuters, Bloomberg, CNBC) for sentiment
+- Wikipedia for company background and structure
 
 Never fabricate numbers, links, or quotes. If data is unavailable, state it explicitly.
+
+### Web Fetch Failure Protocol
+
+Many financial sites block automated access. **Do not retry the same domain more than twice.** Follow this rule:
+
+1. Try up to **3 fetch attempts** across different sources for the same data point
+2. If all 3 fail, **use training knowledge** — note the data source as "training knowledge (cutoff Aug 2025)" and add a ⚠️ flag to that figure
+3. Add a note at the top of the Obsidian file if more than half the data came from training knowledge, with a link to the IR page for the user to verify
+4. Never spend more than ~5 fetches total per analysis run — the knowledge cutoff is recent enough to produce a useful first-draft analysis
+
+This keeps the analysis fast and cheap. A report built on solid training knowledge with honest uncertainty flags is far more useful than an hour of blocked web requests.
 
 ---
 
@@ -164,3 +360,47 @@ Never fabricate numbers, links, or quotes. If data is unavailable, state it expl
 - Never use `==highlight==` markup
 - Use emojis exactly as specified in each step's reference file — they serve as visual scanners
 - Indent sub-bullets consistently (Obsidian uses tab indentation)
+
+### Emphasis Conventions (for readability)
+
+Use formatting to create a visual hierarchy within prose — not everywhere, just where it genuinely helps the reader spot what matters:
+
+| Use | For |
+|-----|-----|
+| **Bold** | Critical conclusions and warnings the investor must not miss (e.g. **value trap risk**, **market is pricing in structural headwinds**) |
+| `backtick` | Key numbers, ratios, thresholds, and statistics — renders with a highlighted background in Obsidian (e.g. `0.55x P/BV`, `5-6% yield`, `NPL > 4%`, `CAR 18.8%`) |
+| *Italic* | Supporting context, caveats, and secondary insights (e.g. *well above BOT's 11% minimum*, *historically Thai banks at this level recover*) |
+| *Italic quotes* | All direct quotes and analyst commentary |
+
+Do NOT over-format — scarcity is what makes emphasis effective. Aim for `backtick` on every key metric, **bold** on 2-3 key conclusions per section, and italics for nuance only.
+
+### Heading Hierarchy (Obsidian foldable structure)
+
+Every step must use this heading structure so sections are bold and foldable in Obsidian:
+
+| Level | Use for |
+|-------|---------|
+| `##` | Step-level headings (e.g. `## Step 4 - Competitive Position (Moat)`) |
+| `###` | Major sub-sections within a step (e.g. `### 🏰 Moat Analysis`, `### ⚠️ Risks & Final Considerations`) |
+| `####` | Individual items or sub-sub-sections (e.g. `#### ⚓ Switching Costs`, `#### 📊 Executive Summary`) |
+
+Plain emoji text without a `#` prefix does NOT render as a heading in Obsidian — always prefix with the correct `##`/`###`/`####` level.
+
+### Sources Rule (critical for fact-checking)
+
+**Every step must end with a sources section using full URLs.** This is non-negotiable — sources without URLs are useless for fact-checking.
+
+Rules:
+- Use full URLs (e.g. `https://www.scbx.com/en/investor-relations/`) — never bare domain names like `scb.co.th`
+- Include a sources section for **every step**, including Step 2 (Management), Step 7 (Risks), and any step without a fixed template
+- Standard sources to include per step: company IR page, exchange filings (SET/SGX/SEC), BOT/regulator data where relevant, MacroTrends/GuruFocus for financials, Morningstar for moat, Reuters/Bloomberg for news
+- If a source was blocked or unavailable, still list the URL with a note: `(access restricted at time of analysis)`
+- Training knowledge entries: `Training knowledge (cutoff Aug 2025)` — always as the last bullet
+
+**Source section format:**
+```
+🔗 Sources
+- [Source name] — https://full-url-here
+- [Source name] — https://full-url-here
+- Training knowledge (cutoff Aug 2025)
+```

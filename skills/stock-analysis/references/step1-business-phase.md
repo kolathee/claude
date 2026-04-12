@@ -29,13 +29,20 @@ Return your answer using EXACTLY this format:
 
 **Phase Criteria Match:**
 
-| Criteria     | P1 Startup | P2 Hyper | P3 Break Even | P4 Op Leverage | P5 Cap Return | P6 Decline |
-|--------------|------------|----------|---------------|----------------|---------------|------------|
-| Revenue      |            |          |               |                |               |            |
-| Op Profit    |            |          |               |                |               |            |
-| Div/Buyback  |            |          |               |                |               |            |
+| Criteria | P1 Startup | P2 Hyper | P3 Break Even | P4 Op Leverage | P5 Cap Return | P6 Decline |
+|----------|-----------|---------|--------------|---------------|--------------|-----------|
+| Revenue | None/Small | Fast | Fast | Medium | Slow | Decline |
+| Op Profit | Neg & Growing | Neg & Shrinking | Near Zero | Fast | Slow | Decline |
+| Div/Buyback | No | No | No | No | Yes | Yes |
 
-Mark each cell with ✅ where the company's current metrics match that phase's criteria. Leave blank if it does not match.
+Fill in the matching phase column with ✅ appended to each criterion value where the company matches. All other cells show the plain criterion text. This way the reader sees the full framework AND the match at a glance.
+
+Example for a P5 company:
+| Criteria | P1 Startup | P2 Hyper | P3 Break Even | P4 Op Leverage | P5 Cap Return | P6 Decline |
+|----------|-----------|---------|--------------|---------------|--------------|-----------|
+| Revenue | None/Small | Fast | Fast | Medium | Slow ✅ | Decline |
+| Op Profit | Neg & Growing | Neg & Shrinking | Near Zero | Fast | Slow ✅ | Decline |
+| Div/Buyback | No | No | No | No | Yes ✅ | Yes |
 
 ---
 

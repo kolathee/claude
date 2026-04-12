@@ -6,9 +6,9 @@ Return your answer using EXACTLY this format:
 
 ---
 
-🚀 Growth Drivers Analysis: [COMPANY NAME] ([TICKER])
+### 🚀 Growth Drivers Analysis: [COMPANY NAME] ([TICKER])
 
-📊 Executive Summary
+#### 📊 Executive Summary
 
 **Primary Growth Strategy:** [e.g. Balanced (New Customers + Existing 
 Customers) / New Customer Focus / Existing Customer Focus]
@@ -17,7 +17,7 @@ Customers) / New Customer Focus / Existing Customer Focus]
 
 ---
 
-👥 NEW CUSTOMER ACQUISITION
+### 👥 NEW CUSTOMER ACQUISITION
 
 For each sub-driver below, use EXACTLY this structure:
 
@@ -29,14 +29,14 @@ For each sub-driver below, use EXACTLY this structure:
 - **Confidence:** [High / Medium / Low]
 
 Evaluate these New Customer sub-drivers:
-🎯 Marketing & Sales Investment
-🌐 New Distribution Channels
-🗺️ Geographic/Market Expansion
-🤝 Acquisitions
+#### 🎯 Marketing & Sales Investment
+#### 🌐 New Distribution Channels
+#### 🗺️ Geographic/Market Expansion
+#### 🤝 Acquisitions
 
 ---
 
-💰 EXISTING CUSTOMER EXPANSION
+### 💰 EXISTING CUSTOMER EXPANSION
 
 Use the same structure for each sub-driver:
 
@@ -48,13 +48,13 @@ Use the same structure for each sub-driver:
 - **Confidence:** [High / Medium / Low]
 
 Evaluate these Existing Customer sub-drivers:
-📈 Pricing Power
-🎁 New Products/Services
-🔄 Customer Retention
+#### 📈 Pricing Power
+#### 🎁 New Products/Services
+#### 🔄 Customer Retention
 
 ---
 
-🎯 Strategic Assessment
+### 🎯 Strategic Assessment
 
 **Primary Drivers (Strongest)**
 1. [Driver Name]
@@ -76,7 +76,7 @@ Evaluate these Existing Customer sub-drivers:
 
 ---
 
-🗂️ Growth Driver Matrix
+### 🗂️ Growth Driver Matrix
 
 **New Customers**
 

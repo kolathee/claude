@@ -49,9 +49,9 @@ Return your answer using EXACTLY this format:
 
 ---
 
-📊 Phase-Based Key Metrics: [COMPANY NAME] ([TICKER])
+### 📊 Phase-Based Key Metrics: [COMPANY NAME] ([TICKER])
 
-📈 Phase [#] - [PHASE NAME] Scorecard
+#### 📈 Phase [#] - [PHASE NAME] Scorecard
 
 | Metric | Score | Current Value | Target (Green threshold) | Trend |
 |--------|-------|---------------|--------------------------|-------|
@@ -63,21 +63,20 @@ Return your answer using EXACTLY this format:
 
 ---
 
-💡 Overall Assessment
+### 💡 Overall Assessment
 
-🏅 Overall Phase Health: [🟢 Strong / 🟡 Mixed / 🔴 Weak] 
-([X] Green metrics, [X] Yellow, [X] Red)
+#### 🏅 Overall Phase Health: [🟢 Strong / 🟡 Mixed / 🔴 Weak] ([X] Green metrics, [X] Yellow, [X] Red)
 
-💪 Key Strengths:
+#### 💪 Key Strengths:
 - [Strength 1 with specific data]
 - [Strength 2 with specific data]
 - [Strength 3 with specific data]
 
-⚠️ Key Concerns:
+#### ⚠️ Key Concerns
 - [Concern 1 with specific data]
 - [Concern 2 with specific data]
 
-🚨 Critical Watch Point:
+#### 🚨 Critical Watch Point
 - [Most important metric or trend to monitor going forward]
 
 ---
