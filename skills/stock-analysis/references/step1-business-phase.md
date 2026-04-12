@@ -3,7 +3,7 @@ it is currently in using the following framework:
 
 Use the following phase framework to make your determination:
 
-| Criteria     | P1 Startup          | P2 Hyper              | P3 Break Even | P4 Op Leverage        | P5 Cap Return        | P6 Decline           |
+| Criteria     | P1 Startup          | P2 Hyper Growth              | P3 Self Funding | P4 Op Leverage        | P5 Cap Return        | P6 Decline           |
 |--------------|---------------------|-----------------------|---------------|-----------------------|----------------------|----------------------|
 | Revenue      | None/Small          | Fast                  | Fast          | Medium                | Slow                 | Decline              |
 | Op Profit    | Neg & Growing       | Neg & Shrinking       | Near Zero     | Fast                  | Slow                 | Decline              |
@@ -29,20 +29,22 @@ Return your answer using EXACTLY this format:
 
 **Phase Criteria Match:**
 
-| Criteria | P1 Startup | P2 Hyper | P3 Break Even | P4 Op Leverage | P5 Cap Return | P6 Decline |
+| Criteria | P1 Startup | P2 Hyper Growth | P3 Self Funding | P4 Op Leverage | P5 Cap Return | P6 Decline |
 |----------|-----------|---------|--------------|---------------|--------------|-----------|
 | Revenue | None/Small | Fast | Fast | Medium | Slow | Decline |
 | Op Profit | Neg & Growing | Neg & Shrinking | Near Zero | Fast | Slow | Decline |
 | Div/Buyback | No | No | No | No | Yes | Yes |
 
-Fill in the matching phase column with ✅ appended to each criterion value where the company matches. All other cells show the plain criterion text. This way the reader sees the full framework AND the match at a glance.
+For non-matching phase columns: show the threshold/range that DEFINES that phase in parentheses — this tells the reader what a company needs to qualify for that phase.
+For the matching phase column: put ✅ in front AND show the company's actual number in parentheses.
+Do NOT put the company's actual number in non-matching cells — only the phase definition range.
 
-Example for a P5 company:
-| Criteria | P1 Startup | P2 Hyper | P3 Break Even | P4 Op Leverage | P5 Cap Return | P6 Decline |
+Example for a P5 company (BDMS):
+| Criteria | P1 Startup | P2 Hyper Growth | P3 Self Funding | P4 Op Leverage | P5 Cap Return | P6 Decline |
 |----------|-----------|---------|--------------|---------------|--------------|-----------|
-| Revenue | None/Small | Fast | Fast | Medium | Slow ✅ | Decline |
-| Op Profit | Neg & Growing | Neg & Shrinking | Near Zero | Fast | Slow ✅ | Decline |
-| Div/Buyback | No | No | No | No | Yes ✅ | Yes |
+| Revenue | None/Small (<5% or 0) | Fast (>20%) | Fast (>20%) | Medium (10-20%) | ✅ Slow (6.65% 3YR CAGR, +4.3% YoY) | Decline (<0%) |
+| Op Profit | Neg & Growing (loss ↑) | Neg & Shrinking (loss ↓) | Near Zero (~0%) | Fast (rapid growth ↑) | ✅ Slow (16% op margin, EPS flat 1.00 THB TTM) | Declining (↓) |
+| Div/Buyback | No | No | No | No | ✅ Yes (5.32% yield, 0.80 THB/yr, 24+ consecutive years) | Yes (at risk) |
 
 ---
 

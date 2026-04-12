@@ -22,7 +22,7 @@ P2 - HYPER GROWTH
 - Revenue vs Estimate: 🔴 Miss | 🟡 In-line | 🟢 Beat
 - SO 3YR CAGR (dilution): 🔴 >5% | 🟡 1%-5% | 🟢 <1%
 
-P3 - BREAK EVEN
+P3 - SELF FUNDING
 - Revenue 3YR CAGR: 🔴 <5% | 🟡 5%-10% | 🟢 >10%
 - Gross Margin Direction: 🔴 Declining | 🟡 Stable | 🟢 Improving
 - Operating Margin: 🔴 Negative & Worsening | 🟡 Improving | 🟢 Positive

@@ -12,16 +12,40 @@ Produce a comprehensive 8-step investment research report for any publicly trade
 
 ## Obsidian Save Path
 
+Each company gets its own folder. Structure:
+
 ```
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/Stock Analysis/[Company Name] - Stock Analysis.md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/Stock Analysis/
+  [TICKER] - [Company Name]/
+    [Company Name] - Stock Analysis.md     ← main analysis note
+    references/
+      financial-data.md                    ← key metrics from yfinance script
+      ceo-letter.md                        ← extracted from annual report
+      business-overview.md
+      mda.md
+      corporate-governance.md
+      risk-factors.md
+      esg-sustainability.md
+      auditor-report.md
 ```
 
-Example:
+Folder naming convention: `[TICKER] - [Company Name]`
+
+Examples:
 ```
-.../Stock Analysis/Apple - Stock Analysis.md
+.../Stock Analysis/BDMS.BK - Bangkok Dusit Medical Services/
+.../Stock Analysis/AAPL - Apple/
+.../Stock Analysis/D05.SI - DBS Group/
 ```
 
-Save directly under the Stock Analysis folder — do NOT create a subfolder. Use the `Write` tool to save.
+Use the `Write` tool to save all files. Create the folder and `references/` subfolder as needed — Obsidian creates folders automatically when you write a file to a new path.
+
+### What to save in references/
+
+- **`financial-data.md`** — formatted summary of all key yfinance metrics (price, valuation, financials, growth, dividends, analyst consensus). Format as a readable markdown table, not raw JSON.
+- **`ceo-letter.md`**, **`business-overview.md`**, **`mda.md`**, **`corporate-governance.md`**, **`risk-factors.md`**, **`esg-sustainability.md`**, **`auditor-report.md`** — the extracted text from the annual report, as-is (truncated at 4000 words each by the fetcher script). Only save sections that were actually extracted (not null).
+
+Save references **before** writing the main analysis note.
 
 ---
 
@@ -124,6 +148,24 @@ Mark ✅ if the field has actual data, ⚠️ if all or most values are null (wi
 | ESG/Sustainability | ✅ Found / ❌ Missing | Step 3 (ESG profile) |
 | Auditor Report | ✅ Found / ❌ Missing | Step 5 (Going concern flags) |
 
+**Section Truncation Status** (only show this table if any found section was truncated)
+
+For each section that was extracted, check whether it hit the word limit. Parse the extracted text for the truncation marker `[... truncated at X of Y words ...]`. Show:
+
+| Section | Words Captured | Total Words | Coverage | Priority |
+|---------|---------------|-------------|----------|----------|
+| Business Overview | X,XXX | X,XXX | XX% | 🔴 CRITICAL |
+| Risk Factors | X,XXX | X,XXX | XX% | 🔴 CRITICAL |
+| MD&A | X,XXX | X,XXX | XX% | 🟡 Important |
+| CEO Letter | X,XXX | X,XXX | XX% | 🟡 Important |
+| Corporate Governance | X,XXX | X,XXX | XX% | 🟢 Lower priority |
+| ESG/Sustainability | X,XXX | X,XXX | XX% | 🟢 Lower priority |
+| Auditor Report | X,XXX | X,XXX | XX% | 🟢 Lower priority |
+
+- If a section was not truncated (full text captured), show "100%" in Coverage.
+- If a section is Missing (❌), omit it from this table.
+- Current word limits: business_overview 20,000 | risk_factors 20,000 | mda 12,000 | ceo_letter 8,000 | corporate_governance 5,000 | esg_sustainability 4,000 | auditor_report 3,000
+
 **Overall Readiness**
 
 Choose one:
@@ -131,14 +173,17 @@ Choose one:
 - **Partial** — X of 7 annual report sections found; steps Y and Z will rely on training knowledge ⚠️
 - **Limited** — annual report PDF not found; all narrative steps will rely on training knowledge ⚠️
 
-**How to improve coverage** (only show if sections are missing):
+**How to improve coverage** (only show if sections are missing or critically truncated):
 - To provide the annual report manually: `python ~/.claude/skills/stock-analysis/scripts/fetch_annual_report.py --pdf /path/to/report.pdf --ticker <TICKER>`
 - Clear cache and retry: `python ... --no-cache <TICKER>`
 - For Vietnamese/HK companies: download the annual report PDF from the company's IR page and use `--pdf`
 
 ---
 
-After presenting the report, ask: **"Shall I proceed with the full analysis, or would you like to provide any missing documents first?"**
+After presenting the report, ask: **"Shall I proceed with the full analysis, or would you like to adjust coverage for any sections first?"**
+
+- If any CRITICAL section (business_overview, risk_factors) is below 80% coverage, explicitly flag this: *"Business Overview is only X% covered — some details may be missed in Step 3. Would you like to increase the limit before proceeding?"*
+- The user can say "proceed" to continue as-is, or request a re-run with different limits.
 
 Only continue to the 8-step analysis once the user confirms to proceed.
 
@@ -258,12 +303,27 @@ Build the Obsidian note in two sections:
 - One-line investment thesis
 
 **Section 2 - Deep Dive**
-Full output from all 8 steps in order, each under its own `##` heading.
+Full output from all 8 steps in order, each under its own `###` heading (one level below `## Section 2`).
+
+**Section 3 - Final Assessment Checklist**
+
+Add the checklist at the very end of the note (after Section 2). Populate it as follows:
+
+- **Assess for All Phases**: leave all checkboxes empty — the user fills these in after reading
+- **Key Metrics by Business Phase**: use the phase from Step 1. In the Phase Criteria Match table: non-matching cells show the criterion label + the threshold/range that defines that phase in parentheses (e.g. `Fast (>20%)`); the matching phase cells get ✅ in front + the company's actual number (e.g. `✅ Slow (6.65% 3YR CAGR, +4.3% YoY)`). Only the matching cell shows the real company number — all others show the phase definition range. Keep ONLY the metrics block for that phase — delete all other phase blocks. **Auto-fill the metric scores from Step 5**: for each metric row, replace `- [ ]` in the matching column with `- ` + the color emoji (🔴, 🟡, or 🟢) followed by the label text — e.g. `- 🟡 Between 5% and 10%`. Leave the non-matching cells as `- [ ]`. Do not leave any metric row blank — all must be pre-filled.
+- **Assess Risk**: leave empty — user fills in based on their read of Step 7
+- **Assess Valuation**: fill in the current P/E and P/FCF values from the financial data. For sector median, use training knowledge or flag with ⚠️ if unknown. Leave checkboxes empty.
+- **Are You Interested?**: leave empty — this is the user's final verdict
 
 ### Step 10: Save and confirm
 
-Save to the Obsidian path above. Tell the user:
-- File path saved
+Save in this order:
+1. All `references/` files (financial-data.md + any extracted annual report sections)
+2. The main `[Company Name] - Stock Analysis.md` note
+
+Tell the user:
+- Folder path created (e.g. `Stock Analysis/BDMS.BK - Bangkok Dusit Medical Services/`)
+- Number of reference files saved
 - The one-line investment thesis from Section 1
 
 ---
@@ -300,29 +360,145 @@ Save to the Obsidian path above. Tell the user:
 
 ## Section 2 - Deep Dive
 
-## Step 1 - Business Growth Cycle Phase
+### Step 1 - Business Growth Cycle Phase
 [Full Step 1 output]
 
-## Step 2 - Management & Governance
+### Step 2 - Management & Governance
 [Step 2 findings]
 
-## Step 3 - Business Understanding
+### Step 3 - Business Understanding
 [Full Step 3 output]
 
-## Step 4 - Competitive Position (Moat)
+### Step 4 - Competitive Position (Moat)
 [Full Step 4 output]
 
-## Step 5 - Financial Health (Key Metrics)
+### Step 5 - Financial Health (Key Metrics)
 [Full Step 5 output]
 
-## Step 6 - Growth Drivers
+### Step 6 - Growth Drivers
 [Full Step 6 output]
 
-## Step 7 - Risks
+### Step 7 - Risks
 [Full Step 7 output]
 
-## Step 8 - Market / People Sentiment
+### Step 8 - Market / People Sentiment
 [Full Step 8 output]
+
+---
+
+## Final Assessment Checklist
+
+> Fill in these checkboxes after reading the full analysis. Check ONE box per row.
+
+### Assess for All Phases
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Business Description From 10k | - [ ] I'm Confused | - [ ] I Understand | - [ ] I'm Excited! |
+| Moat | - [ ] None / Weakening | - [ ] Narrow / Stable | - [ ] Wide / Expanding |
+| Long Term Potential | - [ ] Low or Negative | - [ ] Good | - [ ] Great |
+
+---
+
+### Key Metrics by Business Phase — Phase [#] - [PHASE NAME]
+
+> Thresholds are phase-specific. The table below shows why this company is in this phase.
+
+**Phase Criteria Match:**
+
+| Criteria | P1 Startup | P2 Hyper Growth | P3 Self Funding | P4 Op Leverage | P5 Cap Return | P6 Decline |
+|----------|------------|-----------------|-----------------|----------------|---------------|------------|
+| Revenue | None/Small ([actual]) | Fast ([actual]) | Fast ([actual]) | Medium ([actual]) | ✅ Slow ([actual]) | Decline ([actual]) |
+| Op Profit | Neg & Growing ([actual]) | Neg & Shrinking ([actual]) | Near Zero ([actual]) | Fast ([actual]) | ✅ Slow ([actual]) | Declining ([actual]) |
+| Div/Buyback | No | No | No | No | ✅ Yes ([actual]) | Yes ([actual]) |
+
+*Copy from Step 1 output. Non-matching cells: show the phase's definition threshold (e.g. `Fast (>20%)`). Matching cell: ✅ + actual company number.*
+
+[PASTE ONLY THE RELEVANT PHASE TABLE BELOW — DELETE THE REST]
+
+**P1 - Startup:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue | - [ ] Declining | - [ ] Flat | - [ ] Growing |
+| Gross Margin | - [ ] Declining | - [ ] Stable | - [ ] Improving |
+| Cash Runway | - [ ] <12mo | - [ ] 12-24mo | - [ ] >24mo |
+| Revenue vs Estimate | - [ ] Miss | - [ ] In-line | - [ ] Beat |
+| SO 3YR CAGR (dilution) | - [ ] >5% | - [ ] 1-5% | - [ ] <1% |
+
+**P2 - Hyper Growth:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue 3YR CAGR | - [ ] <5% | - [ ] 5-10% | - [ ] >10% |
+| Gross Margin Direction | - [ ] Declining | - [ ] Stable | - [ ] Improving |
+| Cash Runway | - [ ] <12mo | - [ ] 12-24mo | - [ ] >24mo |
+| Revenue vs Estimate | - [ ] Miss | - [ ] In-line | - [ ] Beat |
+| SO 3YR CAGR (dilution) | - [ ] >5% | - [ ] 1-5% | - [ ] <1% |
+
+**P3 - Self Funding:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue 3YR CAGR | - [ ] <5% | - [ ] 5-10% | - [ ] >10% |
+| Gross Margin Direction | - [ ] Declining | - [ ] Stable | - [ ] Improving |
+| Operating Margin | - [ ] Neg & Worsening | - [ ] Improving | - [ ] Positive |
+| Free Cash Flow | - [ ] Negative | - [ ] Near Zero | - [ ] Positive |
+| SO 3YR CAGR (dilution) | - [ ] >5% | - [ ] 1-5% | - [ ] <1% |
+
+**P4 - Operating Leverage:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue 3YR CAGR | - [ ] <5% | - [ ] 5-10% | - [ ] >10% |
+| Operating Margin | - [ ] <5% | - [ ] 5-15% | - [ ] >15% |
+| FCF Margin | - [ ] Negative | - [ ] 0-10% | - [ ] >10% |
+| Earnings vs Estimate | - [ ] Miss | - [ ] In-line | - [ ] Beat |
+| ROIC | - [ ] <10% | - [ ] 10-20% | - [ ] >20% |
+
+**P5 - Capital Return:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue 3YR CAGR | - [ ] Less than 5% | - [ ] Between 5% and 10% | - [ ] Over 10% |
+| FCF / Net Income | - [ ] Less than 50% | - [ ] Between 50% and 90% | - [ ] Over 90% |
+| EBIT / Interest Expense | - [ ] Less than 2x | - [ ] Between 2x and 5x | - [ ] 5+ |
+| ROIC | - [ ] Less than 10% | - [ ] Between 10% and 20% | - [ ] Over 20% |
+| Capital Returns | - [ ] None | - [ ] Yes, Less than 5 Years | - [ ] Yes, 5+ Years |
+
+**P6 - Decline:**
+
+| | 🔴 Red | 🟡 Yellow | 🟢 Green |
+|---|---|---|---|
+| Revenue Trend | - [ ] Declining | - [ ] Stabilizing | - [ ] Recovering |
+| Operating Margin | - [ ] Declining | - [ ] Stable | - [ ] Improving |
+| FCF / Net Income | - [ ] <50% | - [ ] 50-90% | - [ ] >90% |
+| Capital Returns | - [ ] None | - [ ] Yes <5yrs | - [ ] Yes 5+yrs |
+| Turnaround Catalyst | - [ ] None visible | - [ ] Possible | - [ ] Clear |
+
+---
+
+### Assess Risk
+
+| | 🔴 High | 🟡 Medium | 🟢 Low |
+|---|---|---|---|
+| Execution Risk | - [ ] High | - [ ] Medium | - [ ] Low |
+
+---
+
+### Assess Valuation
+
+| | 🔴 Red - Overvalued | 🟡 Yellow - Fairly Valued | 🟢 Green - Undervalued |
+|---|---|---|---|
+| Primary: Price To Earnings (P/E) | - [ ] >20% Over Median | - [ ] Within 20% of Median | - [ ] >20% Below Median |
+| Secondary: Price to Free Cash Flow (P/FCF) | - [ ] >20% Over Median | - [ ] Within 20% of Median | - [ ] >20% Below Median |
+
+---
+
+### Are You Interested?
+
+| - [ ] ❌ No - Pass | - [ ] 🤔 Kind Of | - [ ] ✅ Yes! |
+|---|---|---|
 ```
 
 ---
@@ -380,11 +556,12 @@ Every step must use this heading structure so sections are bold and foldable in 
 
 | Level | Use for |
 |-------|---------|
-| `##` | Step-level headings (e.g. `## Step 4 - Competitive Position (Moat)`) |
-| `###` | Major sub-sections within a step (e.g. `### 🏰 Moat Analysis`, `### ⚠️ Risks & Final Considerations`) |
-| `####` | Individual items or sub-sub-sections (e.g. `#### ⚓ Switching Costs`, `#### 📊 Executive Summary`) |
+| `##` | Section-level headings only: `## Section 1`, `## Section 2`, `## Section 3` |
+| `###` | Step-level headings (e.g. `### Step 4 - Competitive Position (Moat)`) — nested under `## Section 2` |
+| `####` | Major sub-sections within a step (e.g. `#### 🏰 Moat Analysis`, `#### ⚠️ Risks & Final Considerations`) |
+| `#####` | Individual items or sub-sub-sections (e.g. `##### ⚓ Switching Costs`, `##### 📊 Executive Summary`) |
 
-Plain emoji text without a `#` prefix does NOT render as a heading in Obsidian — always prefix with the correct `##`/`###`/`####` level.
+Plain emoji text without a `#` prefix does NOT render as a heading in Obsidian — always prefix with the correct level.
 
 ### Sources Rule (critical for fact-checking)
 
@@ -400,7 +577,9 @@ Rules:
 **Source section format:**
 ```
 🔗 Sources
-- [Source name] — https://full-url-here
-- [Source name] — https://full-url-here
+- Source name — https://full-url-here
+- Source name — https://full-url-here
 - Training knowledge (cutoff Aug 2025)
 ```
+
+Do NOT use `- [N]` or `- [Source name]` format — Obsidian renders square brackets as checkboxes. Use plain `- ` bullets only.

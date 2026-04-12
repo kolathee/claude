@@ -52,7 +52,18 @@ from urllib.parse import urljoin
 # Config
 # ---------------------------------------------------------------------------
 
-MAX_SECTION_WORDS = 4000
+# Per-section word limits — critical sections get higher caps
+# business_overview and risk_factors are top priority: capture as fully as possible
+SECTION_MAX_WORDS = {
+    "business_overview":    20000,  # CRITICAL — capture fully
+    "risk_factors":         20000,  # CRITICAL — capture fully
+    "mda":                  12000,  # Important — financial commentary + outlook
+    "ceo_letter":            8000,  # Important — management tone
+    "corporate_governance":  5000,  # Lower priority — partial OK
+    "esg_sustainability":    4000,  # Lower priority — partial OK
+    "auditor_report":        3000,  # Lower priority — going concern flag only
+}
+DEFAULT_MAX_SECTION_WORDS = 8000  # fallback for any unlisted section
 CACHE_DIR = Path.home() / ".claude/skills/stock-analysis/cache"
 BROWSER_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
@@ -172,7 +183,10 @@ def _clean(text):
     text = re.sub(r'-\n([a-z])', r'\1', text)
     return text.strip()
 
-def _truncate(text, max_words=MAX_SECTION_WORDS):
+def _truncate(text, max_words=None, section_key=None):
+    """Truncate text to max_words. Uses per-section limits when section_key is provided."""
+    if max_words is None:
+        max_words = SECTION_MAX_WORDS.get(section_key, DEFAULT_MAX_SECTION_WORDS) if section_key else DEFAULT_MAX_SECTION_WORDS
     words = text.split()
     if len(words) <= max_words:
         return text
@@ -323,7 +337,7 @@ def _parse_sec_text(text: str, form_type: str = "10-K") -> dict:
             continue
 
         if sections[sec_key] is None:
-            sections[sec_key] = _truncate(_clean(chunk))
+            sections[sec_key] = _truncate(_clean(chunk), section_key=sec_key)
             _log(f"  [SEC/{form_type}] [{sec_key}] Item {raw} → {len(chunk.split())} words")
 
     return sections
@@ -667,7 +681,7 @@ def _extract_by_bookmarks(pdf, toc, sections):
                 pass
 
         if parts:
-            text = _truncate(_clean("\n".join(parts)))
+            text = _truncate(_clean("\n".join(parts)), section_key=sec_key)
             sections[sec_key] = text
             _log(f"  [{sec_key}] '{title}' pp{page_num}-{end_page} ({len(text.split())} words)")
 
@@ -694,7 +708,7 @@ def _extract_by_scan(pdf, sections):
 
     for k, parts in buffers.items():
         if parts:
-            sections[k] = _truncate(_clean("\n".join(parts)))
+            sections[k] = _truncate(_clean("\n".join(parts)), section_key=k)
 
     return sections
 
@@ -808,15 +822,19 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("ticker", nargs="?", help="e.g. AAPL, SCB.BK, D05.SI")
     parser.add_argument("--pdf", help="Path to a local PDF")
+    parser.add_argument("--ticker", dest="ticker_flag", help="Ticker alias (alternative to positional arg)")
     parser.add_argument("--no-cache", action="store_true")
     parser.add_argument("--section", help="Print one section: mda, risk_factors, ceo_letter, ...")
     args = parser.parse_args()
 
-    if not args.ticker and not args.pdf:
+    # --ticker flag overrides positional arg (allows: --pdf /path --ticker BDMS.BK)
+    resolved_ticker = args.ticker_flag or args.ticker
+
+    if not resolved_ticker and not args.pdf:
         parser.print_help()
         sys.exit(1)
 
-    t = (args.ticker or "MANUAL").upper()
+    t = (resolved_ticker or "MANUAL").upper()
 
     if args.no_cache:
         c = _cache_path(t, datetime.now().year)
