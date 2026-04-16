@@ -40,6 +40,33 @@ Before writing, judge whether the topic fits a single 5-minute page:
 
 For broad topics: create a main index page first, then create each sub-page and link them using Obsidian wikilinks: `[[Sub-Page Title]]`.
 
+**Sub-pages can have their own sub-pages** when a sub-topic is itself broad enough to exceed the 5-minute rule AND its overflow content is conceptually distinct (not just "more of the same"). Maximum nesting depth: **2 levels** (index → sub-page → sub-sub-page). Never go deeper.
+
+```
+Level 0:  Topic/Topic - Overview.md
+Level 1:  Topic/Sub-Topic.md           (or Topic/Sub-Topic/Sub-Topic - Overview.md if it splits further)
+Level 2:  Topic/Sub-Topic/Detail.md    (deepest allowed)
+```
+
+When a sub-page needs to split: convert it into its own folder with an Overview page, then add the detail pages inside that folder.
+
+### Step 2.5: Scan for Related Pages
+
+Before writing, scan the Study folder for existing pages that are related to the current topic:
+
+```bash
+find ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/CupOb/Study -name "*.md" | sort
+```
+
+Note any pages that share concepts, prerequisites, or natural follow-ons with the topic being written. You will link to them in a **"Related Pages"** section at the bottom of each page (after Dive Deeper, before the quiz). Use Obsidian wikilinks: `[[Page Name]]`.
+
+Examples of worth linking:
+- JS DOM page → link to `[[JavaScript - Overview]]` (prerequisite)
+- React State & Hooks → link to `[[JS DOM]]` (related browser concept)
+- A data structures page → link to an algorithms page if one exists
+
+Don't force links — only include pages where the connection is genuinely useful to a reader.
+
 ### Step 3: Write the Study Page(s)
 
 Follow the output template in `references/template.md`. Key principles:
@@ -53,6 +80,11 @@ Follow the output template in `references/template.md`. Key principles:
 **Always show a concrete example** — after explaining a concept, include a minimal code snippet or real-world analogy.
 
 **5-minute rule** — if the main section takes longer than 5 minutes to read, move overflow content below a `---` divider into a "Dive Deeper" section or a linked sub-page.
+
+**Worth mentioning but verbose** — details, edge cases, and extended examples that are valuable but would break the concise flow of the main section belong in a **"More Detail"** section below the main content (before the quiz). This is separate from "Dive Deeper" (which is for entirely optional advanced content). Use "More Detail" for things like:
+- A concept that needs a longer code example to fully illustrate
+- An edge case that's common enough to know but too verbose for inline mention
+- A worked example tracing through multiple steps
 
 ### Step 4: Save to Obsidian
 
@@ -98,6 +130,23 @@ After saving, tell the user:
 ❌ A["Line 1\nLine 2"]
 ```
 
+**Node colors:** Color nodes for visual clarity — colors are aesthetic, not semantic. Use `classDef` for reuse:
+
+```
+classDef blue   fill:#3b82f6,stroke:#1d4ed8,color:#fff
+classDef teal   fill:#14b8a6,stroke:#0f766e,color:#fff
+classDef orange fill:#f97316,stroke:#ea580c,color:#fff
+classDef purple fill:#a855f7,stroke:#7e22ce,color:#fff
+classDef green  fill:#22c55e,stroke:#16a34a,color:#fff
+classDef pink   fill:#ec4899,stroke:#be185d,color:#fff
+classDef slate  fill:#475569,stroke:#1e293b,color:#fff
+classDef amber  fill:#f59e0b,stroke:#b45309,color:#fff
+
+A["Node"]:::blue
+```
+
+Assign colors freely — just make adjacent nodes visually distinct. No need to make color mean anything.
+
 **Use tables for:**
 - Quick comparisons (e.g., GET vs POST, SQL vs NoSQL)
 - Key-value references (e.g., HTTP codes, command cheatsheets)
@@ -110,12 +159,18 @@ After saving, tell the user:
 
 ## Quiz Section
 
-Every study page must end with a **Quick Quiz** section — 4–6 questions that test understanding, not just recall. Good quizzes mix question types:
+Every study page must end with a **Quick Quiz** section. Quizzes are the primary active-learning mechanism — aim for **8–12 questions per page**, enough to cover every major concept, pattern, and gotcha presented. Fewer questions only if the page is genuinely narrow (< 3 concepts).
+
+**Coverage rule:** After writing the quiz, mentally check off each section heading. If a section has no question against it, add one.
+
+Mix question types to test different levels of understanding:
 
 - **Concept check** — "What is X?" or "Why does Y happen?"
 - **Apply it** — "Given this scenario, what would you do / what output do you expect?"
 - **Compare/contrast** — "What's the difference between X and Y?"
 - **Gotcha / common mistake** — "What's wrong with this code?" or "When does this approach break down?"
+- **Predict output** — Show a code snippet, ask what it prints/returns — great for coercion, async order, scope
+- **Design choice** — "When would you choose X over Y?" — tests judgment, not just recall
 
 Format as a collapsible spoiler so the user can attempt before seeing the answer:
 
@@ -135,7 +190,7 @@ Format as a collapsible spoiler so the user can attempt before seeing the answer
 ...
 ```
 
-For multi-page topics, include a quiz on each sub-page covering that page's content. The overview/index page can have a broader quiz spanning all sub-topics.
+For multi-page topics, include a full quiz on each sub-page covering that page's content. The overview/index page quiz should span all sub-topics.
 
 ---
 
@@ -148,9 +203,13 @@ Before saving, verify:
 - [ ] At least one diagram or visual aid
 - [ ] At least one concrete code or real-world example
 - [ ] Main section readable in ≤ 5 minutes
-- [ ] Overflow content in "Dive Deeper" or linked sub-pages
+- [ ] Verbose-but-valuable content moved to "More Detail" section (before quiz)
+- [ ] Truly advanced / optional content in "Dive Deeper" section (after quiz) or linked sub-pages
 - [ ] Sub-page links use `[[wikilink]]` format for Obsidian compatibility
-- [ ] Ends with a Quick Quiz (4–6 questions with collapsible answers)
+- [ ] Related existing study pages linked in a "Related Pages" section
+- [ ] Sub-page nesting ≤ 2 levels deep
+- [ ] Ends with a Quick Quiz (8–12 questions, covering every major concept/section)
+- [ ] Quiz has at least one of each type: concept check, apply-it, compare/contrast, gotcha, predict output
 
 ---
 
