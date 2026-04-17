@@ -53,6 +53,8 @@ skills:
     description: "Private equity for deal sourcing, LBO modeling, due diligence, data room review, IC memo preparation, and portfolio company monitoring."
   stock-analysis:
     description: "Full 8-step stock analysis from a company name or ticker covering business phase, management, moat, financials, growth drivers, risks, and sentiment."
+  pack-cowork-skills:
+    description: "Package Claude Code skills as ZIPs for uploading to Claude Cowork. Fixes frontmatter, descriptions, and paths. Use when asked to pack, export, or rebuild Cowork skills."
 ```
 
 To add a new skill: add its key + description to the registry above.
