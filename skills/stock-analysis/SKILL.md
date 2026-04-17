@@ -335,11 +335,35 @@ Add the checklist at the very end of the note (after Section 2). Populate it as 
 - **Assess Valuation**: fill in the current P/E and P/FCF values from the financial data. For sector median, use training knowledge or flag with ⚠️ if unknown. Leave checkboxes empty.
 - **Are You Interested?**: leave empty — this is the user's final verdict
 
-### Step 10: Save and confirm
+### Step 10: Create the Products Page
+
+Save a separate `[Company Name] - Products.md` file in the same folder as the main analysis note.
+
+**Purpose:** Summarise all company products grouped by category so the investor can quickly understand what the company sells.
+
+**File naming:** `[Company Name] - Products.md` (same folder as the main note)
+
+**Structure:**
+- Top-level `##` heading per business segment (e.g. `## 🌐 Google Services`, `## ☁️ Google Cloud`, `## 🚀 Other Bets`) — always include a fitting emoji
+- Sub-section `###` heading per product category within a segment (e.g. `### 🔍 Search & Discovery`) — always include a fitting emoji
+- Each sub-section is a two-column markdown table: `| Product | Description |`
+- Description: one concise sentence max
+- If the company has an "Other / Ventures / Investments" arm, list those in a flat table (Company + Category + Description)
+
+**Highlighting significant revenue drivers:**
+- Prefix the product name with `⭐` and **bold** it: `| ⭐ **Product Name** | ... |`
+- Add revenue figures or % of total revenue to the description where known (e.g. `` `~$200B`, `~50%` of total revenue ``)
+- Significant = product that directly generates a material share of company revenue (ads, subscriptions, cloud contracts, hardware sales)
+- Do NOT mark internal tools, platforms that enable other products (e.g. Android OS, Chrome browser), or research divisions as ⭐ unless they generate standalone revenue
+
+**Source:** Use the `business_overview.md` reference file as primary source. Supplement with training knowledge for products not explicitly listed there.
+
+### Step 11: Save and confirm
 
 Save in this order:
 1. All `references/` files (financial-data.md + any extracted annual report sections)
 2. The main `[Company Name] - Stock Analysis.md` note
+3. The `[Company Name] - Products.md` note
 
 Tell the user:
 - Folder path created (e.g. `Stock Analysis/BDMS.BK - Bangkok Dusit Medical Services/`)
