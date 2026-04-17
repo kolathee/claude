@@ -1,11 +1,11 @@
 ---
 name: experiment-integration
-description: Integrate or deintegrate experiments in the iOS codebase. Use when the user says "integrate experiment", "deintegrate experiment", "Int", "DeInt", "remove experiment", "add experiment".
+description: Integrate or deintegrate experiments in the codebase. Use when the user says "integrate experiment", "deintegrate experiment", "Int", "DeInt", "remove experiment", "add experiment".
 ---
 
 # Experiment Lifecycle
 
-Handle integration and deintegration of experiments in the iOS codebase.
+Handle integration and deintegration of experiments in the codebase.
 
 ## Key Terminology
 

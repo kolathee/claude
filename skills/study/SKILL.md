@@ -30,6 +30,33 @@ Produce a concise, visually structured study page for any topic — reviewable i
 - Supplement with `WebSearch` for recent topics, technical specs, or anything that benefits from up-to-date sources
 - Prefer authoritative sources (official docs, Wikipedia, reputable tutorials)
 
+### Step 1.5: Determine Category Folder
+
+Every topic belongs in a category subfolder. Infer the category from the topic domain. Use these as a starting point — add new ones as needed:
+
+| Category | Examples |
+|---|---|
+| `Finance & Investing` | Stocks, bonds, preferred stock, DCF, options |
+| `Computer Science` | Data structures, algorithms, OS concepts, networking |
+| `Programming` | Language features, patterns, frameworks, tools |
+| `Mathematics` | Probability, linear algebra, calculus |
+| `Business & Strategy` | Business models, strategy frameworks, economics |
+| `Science` | Physics, chemistry, biology concepts |
+| `Other` | Anything that doesn't clearly fit above |
+
+The save path for **all** pages becomes:
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic].md
+```
+
+For broad multi-page topics, the category folder wraps the topic folder:
+```
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]/[Topic] - Overview.md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]/[Sub-Topic].md
+```
+
+Create the category folder if it doesn't exist yet (use `mkdir -p`).
+
 ### Step 2: Assess Scope
 
 Before writing, judge whether the topic fits a single 5-minute page:
@@ -90,19 +117,19 @@ Follow the output template in `references/template.md`. Key principles:
 
 **Single page:**
 ```
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Topic].md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic].md
 ```
 
 **Multi-page (broad topics):**
 ```
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Topic]/[Topic] - Overview.md
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Topic]/[Sub-Topic 1].md
-~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Topic]/[Sub-Topic 2].md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]/[Topic] - Overview.md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]/[Sub-Topic 1].md
+~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]/[Sub-Topic 2].md
 ```
 
-Create the subdirectory first if needed:
+Create the category (and topic) subdirectory first if needed:
 ```bash
-mkdir -p ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Topic]
+mkdir -p ~/Library/Mobile\ Documents/iCloud~md~obsidian/Documents/CupOb/Study/[Category]/[Topic]
 ```
 
 Use the `Write` tool to save each file.
