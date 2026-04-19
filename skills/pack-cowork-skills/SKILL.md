@@ -53,6 +53,12 @@ skills:
     description: "Private equity for deal sourcing, LBO modeling, due diligence, data room review, IC memo preparation, and portfolio company monitoring."
   stock-analysis:
     description: "Full 8-step stock analysis from a company name or ticker covering business phase, management, moat, financials, growth drivers, risks, and sentiment."
+  flashcard-explain:
+    description: "Create an English vocabulary flashcard from a word or phrase seen in context (sentence, meme, headline). Saves to Obsidian with meaning, patterns, alternatives, and tone."
+  flashcard-translate:
+    description: "Create a Thai-to-English translation flashcard from a Thai sentence. Saves to Obsidian with the best English version, tone alternatives, and phrasing notes."
+  web-fetch:
+    description: "Fetch web content when WebFetch is blocked (403, paywall, JS-rendered pages). Uses Gemini CLI via tmux as primary method, curl as fallback."
   pack-cowork-skills:
     description: "Package Claude Code skills as ZIPs for uploading to Claude Cowork. Fixes frontmatter, descriptions, and paths. Use when asked to pack, export, or rebuild Cowork skills."
 ```

@@ -1,6 +1,7 @@
 ---
 name: flashcard-explain
 description: Use when the user wants to create an English vocabulary flashcard from a word or phrase they encountered — in a sentence, meme, article, headline, or any context. Saves to Obsidian spaced-repetition.
+model: haiku
 ---
 
 # flashcard-explain
@@ -17,12 +18,20 @@ The user provides:
 
 1. Identify the word's part of speech
 2. Generate the full card content using the template below
-3. Append the card to `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Learning Vocab.md`
+3. Insert the card at the **top** of `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Learning Vocab.md` using Python:
+   ```python
+   import os
+   path = os.path.expanduser("~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Learning Vocab.md")
+   with open(path, "r", encoding="utf-8") as f:
+       existing = f.read()
+   with open(path, "w", encoding="utf-8") as f:
+       f.write(card_content + "\n\n" + existing)
+   ```
 4. Confirm with: `Added "[word]" to your flashcards.`
 
 ## Card Format (spaced-repetition)
 
-Append to the file using this exact structure — blank line before and after each card:
+Use this exact structure — blank line before and after each card:
 
 ```
 ## [word] ([part of speech])

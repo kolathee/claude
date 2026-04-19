@@ -1,6 +1,7 @@
 ---
 name: flashcard-translate
 description: Use when the user wants to create a Thai-to-English translation practice flashcard from a Thai sentence they want to learn to say in English. Saves to Obsidian spaced-repetition.
+model: haiku
 ---
 
 # flashcard-translate
@@ -16,15 +17,16 @@ The user provides:
 ## Steps
 
 1. Generate the card content using the template below
-2. Append to `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Translation (TH-EN).md`
-3. Use Python via Bash to write (iCloud path has spaces that break shell tools):
+2. Insert the card at the **top** of `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Translation (TH-EN).md` using Python:
    ```python
    import os
    path = os.path.expanduser("~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Translation (TH-EN).md")
-   with open(path, "a", encoding="utf-8") as f:
-       f.write("\n" + card_content)
+   with open(path, "r", encoding="utf-8") as f:
+       existing = f.read()
+   with open(path, "w", encoding="utf-8") as f:
+       f.write(card_content + "\n\n" + existing)
    ```
-4. Confirm with: `Added translation card to your flashcards.`
+3. Confirm with: `Added translation card to your flashcards.`
 
 ## Card Format (spaced-repetition)
 
