@@ -1,6 +1,6 @@
 ---
 name: plan-calendar
-description: Suggest a time-blocked schedule by fitting Todoist and Jira tasks into free calendar slots, then create Google Calendar events. Use when the user says "assign tasks", "plan my day", "plan my week", "plan 2 weeks", "schedule my tasks", "time block tasks", "what should I work on today/this week", or "fill my calendar". Also use for any natural-language calendar request such as "add to calendar", "add to my calendar", "put this on my calendar", "book a slot", "book a timeslot", "block time for", "schedule this", "reschedule", "move this event", "move that to another day", "can you reschedule", "shift this to", "find me a time for", "when can I fit", "I'm going to have [event] at [time]", or any request implying creating, moving, or rearranging a calendar event. Also use for removal requests: "cancel event", "cancel that", "remove from calendar", "delete that event" (removes calendar event AND completes/deletes the Todoist task), or "drop event", "drop that", "skip this", "not doing this anymore", "remove the block" (removes calendar event AND resets Todoist task — clears due date and priority). Supports daily, weekly (7-day), and biweekly (14-day) planning modes.
+description: Schedule tasks into free calendar slots and create Google Calendar events. Use for: plan my day/week/biweekly, assign/schedule/time-block tasks, add to calendar, book a slot, reschedule/move/shift an event, cancel/drop/remove an event, or any request to create, move, or remove a calendar event.
 ---
 
 # Assign Tasks Skill
@@ -261,6 +261,14 @@ Merge Google and Outlook events per day. For overlapping events, merge into a si
 **Minimum slot:** 30 minutes — ignore gaps shorter than this
 
 **⚠️ Calendar overlap SOP (STRICTLY ENFORCED):** Before creating ANY calendar event, always fetch that day's full Google Calendar events and verify the proposed slot is free. Never create an event without checking first. This applies to every single add, even small ones.
+
+**Conflict handling (applies to all event creation, not just Add Mode):**
+- **If free** → create the event immediately, no need to ask
+- **If conflict exists** → do NOT create. Instead:
+  - Tell the user what's already there (event name + time)
+  - Ask what they want to do
+  - Suggest options: keep new event & move the existing one, reschedule the new event (suggest alternative free slots), or override/create anyway (if user insists)
+- **Exception — leave reminders / travel buffer events:** still check, but if the only conflict is the destination event itself, that's expected — create the reminder anyway
 
 **Ignore list — not real conflicts:**
 - **Unnamed Outlook recurring block Mon–Fri 12:00–14:00 Bangkok** = personal time blocking by Cup. Ignore entirely — never treat as a conflict, never move Google Calendar tasks because of it. (Shows as 13:00–15:00 in Outlook API due to timezone bug above.)

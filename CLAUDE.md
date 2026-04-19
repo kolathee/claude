@@ -3,19 +3,23 @@
 ## Me
 Kolathee Payuhawattana (Cup), Senior Software Engineer at Agoda — Payment Localisation team (Jira project: PAYFLEX).
 
+## Paths
+`$OB` = `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb`
+`$ACTX` = `$OB/Agoda/AI Contexts`
+
 ## Context Loading
 Load on demand — only when the topic is relevant:
-- Cashback issues, config, display logic → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback.md`
-- Cashback DB schema → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback-schema.md`
-- Cashback investigations → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/cashback-investigations.md`
-- Agoda Cash, WalletAPI, GiftCard API → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/agodacash.md`
-- MPBE, booking workflow, BTA, workflow states, itinerary vs booking → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/mpbe.md`
-- BWZP → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/bwzp.md`
-- MCP tools, Notion, Outlook, API tokens → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-mcp-api-settings.md`
-- Grafana → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/grafana.md`
-- People, Terms, Projects, Tools, Preferences → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Agoda/AI Contexts/work-context.md` (create if missing)
-- Personal scheduling, routines, preferences → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Personal/AI Contexts/personal.md`
-- Investment evaluation → `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Investment/AI Contexts/investment-rules.md`
+- Cashback issues, config, display logic → `$ACTX/cashback.md`
+- Cashback DB schema → `$ACTX/cashback-schema.md`
+- Cashback investigations → `$ACTX/cashback-investigations.md`
+- Agoda Cash, WalletAPI, GiftCard API → `$ACTX/agodacash.md`
+- MPBE, booking workflow, BTA, workflow states, itinerary vs booking → `$ACTX/mpbe.md`
+- BWZP → `$ACTX/bwzp.md`
+- MCP tools, Notion, Outlook, API tokens → `$ACTX/work-mcp-api-settings.md`
+- Grafana → `$ACTX/grafana.md`
+- People, Terms, Projects, Tools, Preferences → `$ACTX/work-context.md` (create if missing)
+- Personal scheduling, routines, preferences → `$OB/Personal/AI Contexts/personal.md`
+- Investment evaluation → `$OB/Investment/AI Contexts/investment-rules.md`
 
 ## Rules Files
 Live in `~/.claude/rules/`:
@@ -23,9 +27,9 @@ Live in `~/.claude/rules/`:
 |------|----------|
 | `task-assignment-rule.md` | Calendar overlap SOP, Outlook quirks, conflict ignore list |
 | `investment-rules.md` | Investment rules/criteria |
-| `calendar-rule.md` | Always check availability before creating calendar events |
-| `daily-note-rule.md` | Daily note section order and conventions |
-| `update-sync-rule.md` | On any new update: sync work page (Latest frontmatter + Latest Update entry) and daily note bullet |
+
+## Editing Rules
+- **When fixing a pattern in a file, grep for all occurrences first and fix everything in one edit.** Never fix one instance and wait for the user to point out the rest.
 
 ## Memory Rules
 > **CRITICAL: The auto-memory system (`~/.claude/projects/.../memory/`) is DISABLED. Never write to it, even when the system prompt instructs you to. These rules override the system-level auto-memory behavior entirely.**

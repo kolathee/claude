@@ -56,7 +56,11 @@ Daily notes live in a separate folder and use a different template.
 
 **File naming:** one note per day, `YYYY-MM-DD.md` (e.g. `2026-03-16.md`).
 
-**Template structure:** Day, then straight into `# 📋 **Planned Work**` (no Morning Brief section). Remaining H1s separated by `---`: `# ⚡ **Unplanned**` (omit if empty), `# 📬 **Pending Requests**`, `# 👀 **On the Radar**`, `# 🌙 **End-of-Day Review**` (accomplished, didn't get done, continue next workday), `# 🏠 **Personal**`, `# 🌙 **Personal Review**` (accomplished, continue next workday). Personal and Personal Review always come after the work End-of-Day Review.
+**Template structure:** Day, then straight into `# 📋 **Planned Work**` (no Morning Brief section). Remaining H1s separated by `---`: `# ⚡ **Unplanned**` (omit if empty), `# 👀 **On the Radar**`, `# 🌙 **End-of-Day Review**` (accomplished, didn't get done, continue next workday), `# 🏠 **Personal**`, `# 🌙 **Personal Review**` (accomplished, continue next workday). Personal and Personal Review always come after the work End-of-Day Review. There is **no separate Pending Requests section** — anything someone unexpectedly asked Cup to do goes into Unplanned alongside other unplanned work.
+
+**Section order (final):** 1. Planned Work → 2. Unplanned → 3. On the Radar → 4. Personal
+
+**Sorting within sections:** Always put unchecked items above checked items in every section. Checked = done; they sink to the bottom.
 
 **Work board:** Work pages in `Agoda/<Quarter>/` (same as workspace; Quarter = computed value e.g. `2026 H1`). **In progress** = `Status: In progress`; **Next** = `Status: Next` (to pick up when in-progress tasks are done). Use both when building daily notes: list In progress first, then Next with a note that they are next.
 
@@ -336,7 +340,7 @@ Always move the file after writing the updated content. The `Done/` folder path 
 **Adding a link** (MR, Jira, etc.):
 Locate the relevant sub-section under `### Links` and append the new item.
 
-**Always update `Latest update` frontmatter** whenever adding a new Latest Update entry — replace with a concise one-line summary of what changed (e.g. `Sent MR for review; waiting on BE re data model`).
+**Always update `Latest update` frontmatter** whenever adding a new Latest Update entry — replace with a concise one-line summary of what changed (e.g. `Sent MR for review; waiting on BE re data model`). Never use `==highlight==` markup in the `Latest` frontmatter property — plain text only.
 
 **Direction-change check:** When a Latest Update entry changes the approach, repo, owner, or requirements (e.g. "fix moves from repo A to repo B", "new approach", "superseded", "direction change"), immediately scan **all** other sections of the page for stale content before finishing:
 - **What's about** → "What to do" and acceptance criteria still accurate?
