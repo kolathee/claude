@@ -1,7 +1,7 @@
 ---
 name: flashcard-explain
 description: Use when the user wants to create an English vocabulary flashcard from a word or phrase they encountered — in a sentence, meme, article, headline, or any context. Saves to Obsidian spaced-repetition.
-model: haiku
+model: sonnet
 ---
 
 # flashcard-explain

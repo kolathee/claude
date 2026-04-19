@@ -1,7 +1,7 @@
 ---
 name: flashcard-translate
 description: Use when the user wants to create a Thai-to-English translation practice flashcard from a Thai sentence they want to learn to say in English. Saves to Obsidian spaced-repetition.
-model: haiku
+model: sonnet
 ---
 
 # flashcard-translate
