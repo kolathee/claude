@@ -31,9 +31,30 @@ git diff <file>
 
 Group files by logical change (e.g., core logic, data flow wiring, tests). Each group becomes one commit.
 
-### Step 3: Run Local Tests
+### Step 3: Run Local Lint and Tests
 
-Before committing, run the local tests that cover the changed files to make sure nothing is broken.
+Before committing, run lint and tests locally on the changed files. This catches formatting/style issues that would fail CI, saving round-trip time.
+
+#### 3a: Lint
+
+**Detect the linter and run it on changed files:**
+- Node / TypeScript / JavaScript — `npx eslint <changed-files>` and/or `npx prettier --check <changed-files>`
+- .NET / C# — `dotnet format --verify-no-changes` (or the repo's lint command)
+- Scala / SBT — `sbt scalafmtCheck` / `sbt scalafixCheck`
+- Kotlin / Gradle — `./gradlew detekt ktlintCheck`
+- Python — `ruff check <changed-files>` or `flake8 <changed-files>`, and `ruff format --check` or `black --check`
+- Other — check `package.json` scripts, `Makefile`, `CLAUDE.md`, or `README.md` for the repo's lint command
+
+**Scope to changed files when possible** — only lint files you touched, not the entire repo.
+
+**If lint fails:**
+1. Auto-fix when available (e.g., `npx eslint --fix`, `npx prettier --write`, `dotnet format`, `ruff format`)
+2. Re-run lint to confirm the fix
+3. Include the fix in the same commit as the related change
+
+#### 3b: Tests
+
+Run the local tests that cover the changed files to make sure nothing is broken.
 
 **Detect the project and test runner:**
 - Node / TypeScript / JavaScript — look for `package.json` and run the repo's test script (e.g., `npm test`, `yarn test`, `pnpm test`, `jest`, `vitest`)
@@ -47,17 +68,17 @@ Before committing, run the local tests that cover the changed files to make sure
 - If scoping is unclear or the change is broad, run the full suite
 - Use the repo's own conventions from `CLAUDE.md` / `AGENTS.md` / rule files when available
 
-**If tests fail:**
+**If lint or tests fail:**
 1. Read the failure output carefully
-2. Decide whether the test or the implementation is wrong
+2. Decide whether the test/code or the implementation is wrong
 3. Fix the issue (edit code and/or tests)
-4. Re-run the failing tests until they pass
+4. Re-run lint and the failing tests until they pass
 5. Re-run the broader scope once more to confirm no regressions
 6. Only then proceed to the next step
 
-**If tests pass:** proceed to Step 4.
+**If both pass:** proceed to Step 4.
 
-Include any fixes made here in the commit plan below (they may belong in the same commit as the related change, or in their own "fix tests" commit).
+Include any fixes made here in the commit plan below (they may belong in the same commit as the related change, or in their own "fix" commit).
 
 ### Step 4: Plan Commits
 
