@@ -35,6 +35,7 @@ Use this exact structure — blank line before and after each card:
 
 ```
 ## [word] ([part of speech])
+*"[context sentence with <mark class="hltr-yellow">word highlighted in yellow</mark>]"*
 ?
 **Meaning:** [definition. Use <mark class="hltr-blue">blue highlight</mark> for the core concept.]
 ───────────────────
