@@ -1,9 +1,9 @@
 ---
-name: learn
+name: note
 description: Save learnings from the current conversation to the appropriate context file in the Obsidian CupOb vault. Use after resolving an issue, answering a domain question, or exploring a system — any time knowledge was discovered, updated, or expanded that would help in future sessions.
 ---
 
-# /learn
+# /note
 
 Extract new knowledge from this conversation and save it to the right context file so it builds up over time.
 
