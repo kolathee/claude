@@ -108,6 +108,24 @@ Follow the output template in `references/template.md`. Key principles:
 
 **5-minute rule** — if the main section takes longer than 5 minutes to read, move overflow content below a `---` divider into a "Dive Deeper" section or a linked sub-page.
 
+**Use emojis sparingly** — add one relevant emoji to the page title and each `##` section header. For key sub-items within a section (e.g., bold term bullets), add an emoji inline. Do not emoji every bullet or every sentence.
+
+**Use the Highlightr plugin** to make key information pop visually. Apply highlights selectively — not on every sentence. Full color palette and conventions:
+
+| Color | Class | Use for |
+|---|---|---|
+| Yellow | `hltr-yellow` | The key term being introduced in a section |
+| Blue | `hltr-blue` | The most important insight or definition to absorb |
+| Orange | `hltr-orange` | Formulas, calculations, code patterns, worked examples |
+| Green | `hltr-green` | Category / label tags (e.g., "non-cash", "snapshot", "most important") |
+| Red | `hltr-red` | Warnings, gotchas, common mistakes, danger zones |
+| Purple | `hltr-purple` | Ratios, metrics, derived numbers |
+| Pink | `hltr-pink` | Concrete examples, analogies, real-world scenarios |
+| Cyan | `hltr-cyan` | Connections and flows between concepts |
+| Grey | `hltr-grey` | Supplementary / secondary notes, caveats |
+
+Use bold (`**term**`) for strong emphasis. Use *italics* for qualifiers, nuance, side notes, and "as opposed to..." distinctions. Use `<u>underline</u>` for counter-intuitive points or things that are easy to overlook.
+
 **Worth mentioning but verbose** — details, edge cases, and extended examples that are valuable but would break the concise flow of the main section belong in a **"More Detail"** section below the main content (before the quiz). This is separate from "Dive Deeper" (which is for entirely optional advanced content). Use "More Detail" for things like:
 - A concept that needs a longer code example to fully illustrate
 - An edge case that's common enough to know but too verbose for inline mention
@@ -237,6 +255,10 @@ Before saving, verify:
 - [ ] Sub-page nesting ≤ 2 levels deep
 - [ ] Ends with a Quick Quiz (8–12 questions, covering every major concept/section)
 - [ ] Quiz has at least one of each type: concept check, apply-it, compare/contrast, gotcha, predict output
+- [ ] Emojis in page title and `##` section headers; inline on key bold sub-items — not on every bullet
+- [ ] Highlightr marks used selectively across the full palette: yellow (terms), blue (key insight), orange (formulas), green (labels), red (warnings), purple (ratios/metrics), pink (examples), cyan (connections), grey (secondary notes)
+- [ ] *Italics* used for qualifiers, nuance, side notes, and "as opposed to..." distinctions
+- [ ] <u>Underline</u> used for counter-intuitive points or things easy to overlook
 
 ---
 

@@ -43,7 +43,7 @@ Use the `Write` tool to save all files. Create the folder and `references/` subf
 ### What to save in references/
 
 - **`financial-data.md`** — formatted summary of all key yfinance metrics (price, valuation, financials, growth, dividends, analyst consensus). Format as a readable markdown table, not raw JSON.
-- **`ceo-letter.md`**, **`business-overview.md`**, **`mda.md`**, **`corporate-governance.md`**, **`risk-factors.md`**, **`esg-sustainability.md`**, **`auditor-report.md`** — the extracted text from the annual report, as-is (truncated at 4000 words each by the fetcher script). Only save sections that were actually extracted (not null).
+- **`ceo-letter.md`**, **`business-overview.md`**, **`mda.md`**, **`corporate-governance.md`**, **`risk-factors.md`**, **`esg-sustainability.md`**, **`auditor-report.md`** — text extracted from the annual report via web fetch or direct PDF read. Only save sections that were actually obtained (skip if unavailable).
 
 Save references **before** writing the main analysis note.
 
@@ -86,32 +86,32 @@ python ~/.claude/skills/stock-analysis/scripts/fetch_stock_data.py <TICKER>
 | 1Y price change, volume | `price_1y.*` |
 | vs SET/index return | `market_comparison.*` |
 
-**Step B: Run the annual report fetcher.**
+**Step B: Fetch the annual report sections via web.**
 
-```bash
-python ~/.claude/skills/stock-analysis/scripts/fetch_annual_report.py <TICKER>
-```
+Locate and fetch the annual report directly. Target these sections:
 
-This downloads and extracts narrative sections from the official annual report:
+| Section | Contains | Used in |
+|---------|----------|---------|
+| CEO/Chairman Letter | Tone, priorities, strategic framing | Step 2 (Management) |
+| Business Overview | What the company does, products, customers | Step 3 (Business) |
+| MD&A | Management commentary on performance, trends, outlook | Step 5 & 6 |
+| Corporate Governance | Board structure, independence, committees | Step 2 (Governance) |
+| Risk Factors | Formally disclosed risks | Step 7 (Risks) |
+| ESG/Sustainability | Environmental/social disclosures | Step 3 |
+| Auditor Report | Going concern flags, key audit matters | Step 5 |
 
-| Section key | Contains | Used in |
-|-------------|----------|---------|
-| `ceo_letter` | Chairman/CEO letter — tone, priorities, strategic framing | Step 2 (Management) |
-| `business_overview` | What the company does, products, customers | Step 3 (Business) |
-| `mda` | Management commentary on performance, trends, outlook | Step 5 & 6 |
-| `corporate_governance` | Board structure, independence, committees | Step 2 (Governance) |
-| `risk_factors` | What management formally discloses as risks | Step 7 (Risks) |
-| `esg_sustainability` | ESG commitments, social/environmental disclosures | Step 3 |
-| `auditor_report` | Going concern flags, key audit matters | Step 5 |
+**Where to find the annual report by exchange:**
+- **US (NYSE/NASDAQ)**: SEC EDGAR 10-K — https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=[TICKER]&type=10-K
+- **US ADR**: SEC EDGAR 20-F — same URL with type=20-F
+- **Thailand (SET)**: Company IR page → Annual Report / 56-1 One Report
+- **Singapore (SGX)**: Company IR page → Annual Report
+- **Vietnam / HK / others**: Company IR page
 
-Sources by exchange:
-- **US (NYSE/NASDAQ)**: SEC EDGAR 10-K parsed directly — Item 1 (Business), Item 1A (Risks), Item 7 (MD&A)
-- **US ADR (foreign company listed on US exchanges)**: SEC EDGAR 20-F — Item 4 (Business), Item 3D (Risks), Item 5 (MD&A)
-- **Thailand (SET), Singapore (SGX), Vietnam (VSE/HNX), HK, others**: PDF downloaded from company IR page
-
-Results are cached at `~/.claude/skills/stock-analysis/cache/{TICKER}_{YEAR}_annual_report.json` — re-running is instant.
-
-If PDF not found automatically: `python fetch_annual_report.py --pdf /path/to/report.pdf --ticker <TICKER>`
+**Fetch protocol:**
+1. Try fetching the URL directly using the built-in `WebFetch` tool
+2. If `WebFetch` is blocked or returns an error, invoke the `web-fetch` skill as fallback (it uses Gemini CLI which can access more sites)
+3. If the user provides a PDF path directly, read it with the `Read` tool — no script needed
+4. If all fetches fail, fall back to training knowledge and flag with ⚠️
 
 **Step C: Data Availability Report — show this to the user and WAIT for confirmation before proceeding.**
 
@@ -174,9 +174,9 @@ Choose one:
 - **Limited** — annual report PDF not found; all narrative steps will rely on training knowledge ⚠️
 
 **How to improve coverage** (only show if sections are missing or critically truncated):
-- To provide the annual report manually: `python ~/.claude/skills/stock-analysis/scripts/fetch_annual_report.py --pdf /path/to/report.pdf --ticker <TICKER>`
-- Clear cache and retry: `python ... --no-cache <TICKER>`
-- For Vietnamese/HK companies: download the annual report PDF from the company's IR page and use `--pdf`
+- To provide the annual report manually: download the PDF and share the file path — Claude will read it directly with the `Read` tool
+- Try the `web-fetch` skill if direct fetch was blocked
+- For Vietnamese/HK companies: download the annual report PDF from the company's IR page and share the path
 
 ---
 
@@ -592,8 +592,27 @@ Use formatting to create a visual hierarchy within prose — not everywhere, jus
 | `backtick` | Key numbers, ratios, thresholds, and statistics — renders with a highlighted background in Obsidian (e.g. `0.55x P/BV`, `5-6% yield`, `NPL > 4%`, `CAR 18.8%`) |
 | *Italic* | Supporting context, caveats, and secondary insights (e.g. *well above BOT's 11% minimum*, *historically Thai banks at this level recover*) |
 | *Italic quotes* | All direct quotes and analyst commentary |
+| <u>Underline</u> | Counter-intuitive points and things the reader is likely to overlook or misread |
 
 Do NOT over-format — scarcity is what makes emphasis effective. Aim for `backtick` on every key metric, **bold** on 2-3 key conclusions per section, and italics for nuance only.
+
+### Highlightr Plugin (for visual scanning)
+
+Use `<mark class="hltr-*">` highlights on the most important qualitative sentences — **not** on individual numbers (use backticks for those). Target: 2–4 highlights per step, on the sentences that matter most. Full color palette:
+
+| Color | Class | Use for |
+|---|---|---|
+| Yellow | `hltr-yellow` | Key label/term being identified (phase name, moat type, segment) |
+| Blue | `hltr-blue` | The single most important insight or verdict in a section |
+| Green | `hltr-green` | Positive signals — strengths, bullish evidence, confirmed advantages |
+| Red | `hltr-red` | Warnings, risks, red flags, and concerns the investor must not ignore |
+| Orange | `hltr-orange` | Derived conclusions and quantitative summaries |
+| Purple | `hltr-purple` | Financial metrics when used in a verdict sentence |
+| Pink | `hltr-pink` | Concrete examples and real-world evidence |
+| Cyan | `hltr-cyan` | Connections between risk factors or between steps |
+| Grey | `hltr-grey` | Secondary notes, caveats, lower-priority context |
+
+Numbers always use backticks — never highlights. Highlights are for qualitative verdict sentences only.
 
 ### Heading Hierarchy (Obsidian foldable structure)
 
