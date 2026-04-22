@@ -77,36 +77,53 @@ Example format:
 Guidelines for the diagram:
 
 - Use `flowchart TD` (or `LR` if the flow is short and wide).
-- Group nodes by service using `subgraph` — one subgraph per repo/service. This makes service boundaries visually explicit.
-- If there is both a **write path** (state-producing) and a **read path** (state-consuming) — a very common pattern for "where does this flag come from?" questions — split them into two subgraphs and connect them with a dotted edge labeled with what's persisted between them (e.g. `A7 -. customer state persisted .-> B3`).
-- Keep node labels short: service name + method/class + one-line intent. Use `<br/>` for line breaks inside nodes.
-- Color-code the **entry node**, **exit node**, and **the specific nodes that need to change** with `style` directives — this makes "where do I edit?" pop visually.
-- Avoid parentheses inside node text (they're mermaid node-shape syntax); avoid Unicode arrows like `⇒`, `⊇`; stick to ASCII.
+- Split by **path**, not by repo: use `subgraph` for logical phases like WRITE PATH vs READ PATH, happy path vs error path, etc. This is common for "where does this flag come from?" questions — connect the two subgraphs with a dotted edge labeled with what's persisted between them (e.g. `A6 -. customer state persisted .-> B3`).
+- Tag every node with its repository in parentheses on its own line: `"Description of what happens<br/>(repo-name)"`. Wrap labels in double quotes whenever they contain parentheses, commas, or other special characters — `A1["User submits BWZP<br/>(agoda-com-spa-mobile)"]`.
+- **Color every node by the repository it lives in**, using `classDef` + `class` (not per-node `style`). One class per repo, reused consistently across subgraphs — so the same repo reads as the same color in both the write and read paths. This makes the "who owns this hop" question answerable at a glance.
+- Keep node labels short: the method/class or one-line intent on the first line(s), repo name on the last line.
+- Avoid Unicode arrows like `⇒`, `⊇`; stick to ASCII. Parentheses inside node text are fine **when the label is wrapped in double quotes**.
+
+Default color palette (reuse across diagrams so repos read consistently across your notes):
+
+| Repo                  | Fill      | Stroke    |
+| --------------------- | --------- | --------- |
+| agoda-com-spa-mobile  | `#cfe8ff` | `#1e88e5` |
+| Agoda-Gateway         | `#e2d4f5` | `#7b1fa2` |
+| ul-sdk                | `#ffd9b3` | `#e65100` |
+| ul-cronos             | `#fff3cd` | `#f9a825` |
+| customer-api          | `#c8e6c9` | `#2e7d32` |
+| booking-bff           | `#ffd6d6` | `#c62828` |
+| property-bff          | `#d7ccc8` | `#5d4037` |
+
+Add a new row for any repo not in this list, picking a distinct fill/stroke pair, and use it consistently thereafter.
 
 Example shape (adapt to the specific flow):
 
 ```mermaid
 flowchart TD
     subgraph Write["WRITE PATH — what sets the flag"]
-        A1[Service A entry]
-        A2[Service B write]
-        A3[DB / state store]
+        A1["Service A entry<br/>(repo-one)"]
+        A2["Service B write<br/>(repo-two)"]
+        A3["DB / state store<br/>(repo-three)"]
         A1 --> A2 --> A3
     end
 
     subgraph Read["READ PATH — what reads the flag"]
-        B1[UI trigger]
-        B2[Gateway mapper]
-        B3[UI render]
+        B1["UI trigger<br/>(repo-one)"]
+        B2["Gateway mapper<br/>(repo-two)"]
+        B3["UI render<br/>(repo-one)"]
         B1 --> B2 --> B3
     end
 
     A3 -. state persisted .-> B2
 
-    style A1 fill:#e1f5ff
-    style B3 fill:#d4edda
-    style A3 fill:#fff3cd
-    style B2 fill:#fff3cd
+    classDef repoOne fill:#cfe8ff,stroke:#1e88e5,color:#0d47a1
+    classDef repoTwo fill:#e2d4f5,stroke:#7b1fa2,color:#4a148c
+    classDef repoThree fill:#c8e6c9,stroke:#2e7d32,color:#1b5e20
+
+    class A1,B1,B3 repoOne
+    class A2,B2 repoTwo
+    class A3 repoThree
 ```
 
 Ask the user: *"Does this flow make sense? Any questions before we proceed?"*
