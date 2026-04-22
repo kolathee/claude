@@ -49,7 +49,9 @@ Build the picture incrementally with the user.
 
 ### Phase 3: Present the Flow
 
-Once the full path is traced, present a **numbered data flow summary** showing:
+Once the full path is traced, present two complementary views:
+
+**(a) Numbered data flow summary** showing:
 
 - Each service/layer involved
 - The specific file, class, and function at each step
@@ -63,11 +65,48 @@ Example format:
 
 1. **[Service A] — [Class.method()]** (`path/to/file.scala`)
    - [What happens here]
-   
+
 2. **[Service B] — [Class.method()]** (`path/to/file.scala`)
    - [What happens here, how it connects to step 1]
 
 ...
+```
+
+**(b) Mermaid data-flow diagram** — REQUIRED whenever the flow crosses **two or more services/repos**. Prose alone is hard to hold in your head across 4+ hops; a diagram is not optional for cross-service work.
+
+Guidelines for the diagram:
+
+- Use `flowchart TD` (or `LR` if the flow is short and wide).
+- Group nodes by service using `subgraph` — one subgraph per repo/service. This makes service boundaries visually explicit.
+- If there is both a **write path** (state-producing) and a **read path** (state-consuming) — a very common pattern for "where does this flag come from?" questions — split them into two subgraphs and connect them with a dotted edge labeled with what's persisted between them (e.g. `A7 -. customer state persisted .-> B3`).
+- Keep node labels short: service name + method/class + one-line intent. Use `<br/>` for line breaks inside nodes.
+- Color-code the **entry node**, **exit node**, and **the specific nodes that need to change** with `style` directives — this makes "where do I edit?" pop visually.
+- Avoid parentheses inside node text (they're mermaid node-shape syntax); avoid Unicode arrows like `⇒`, `⊇`; stick to ASCII.
+
+Example shape (adapt to the specific flow):
+
+```mermaid
+flowchart TD
+    subgraph Write["WRITE PATH — what sets the flag"]
+        A1[Service A entry]
+        A2[Service B write]
+        A3[DB / state store]
+        A1 --> A2 --> A3
+    end
+
+    subgraph Read["READ PATH — what reads the flag"]
+        B1[UI trigger]
+        B2[Gateway mapper]
+        B3[UI render]
+        B1 --> B2 --> B3
+    end
+
+    A3 -. state persisted .-> B2
+
+    style A1 fill:#e1f5ff
+    style B3 fill:#d4edda
+    style A3 fill:#fff3cd
+    style B2 fill:#fff3cd
 ```
 
 Ask the user: *"Does this flow make sense? Any questions before we proceed?"*
@@ -100,12 +139,16 @@ After implementation, provide a concise summary:
 - The full data flow path (for future reference).
 - Any follow-up items or related areas to watch.
 
-Offer to save learnings to the user's knowledge base (Obsidian work page, etc.).
+When saving to the user's knowledge base (Obsidian work page, etc.):
+
+- Keep the daily-log / "Latest Update" entry **short** — one or two lines that point to the implementation section. It is a log entry, not a design doc.
+- Put the full detail (rationale, chosen approach, trade-offs, operational gates) in the **Implementation Details** section.
+- Always include the **mermaid data-flow diagram** from Phase 3 in Implementation Details — it is the single most re-readable artifact for the next person (or future you) picking this up.
 
 ## Interaction Guidelines
 
 - **Explain as you go** — don't silently search 10 files and dump a conclusion. Share findings incrementally.
-- **Use visuals** — numbered flows, short code snapshots, and clear file paths help the user build a mental model.
+- **Use visuals** — numbered flows, short code snapshots, clear file paths, and mermaid diagrams (see Phase 3) help the user build a mental model. For cross-service flows the mermaid diagram is mandatory, not optional.
 - **Pause at decision points** — when you find something significant (e.g., "this flag doesn't reach the UI directly"), stop and discuss it with the user.
 - **Suggest repos to add** — if the trace leads to a repo not in the workspace, tell the user which repo and why.
 - **Use internal tools** — Glean MCP for docs, Sourcegraph for cross-repo search, Confluence for architecture diagrams.
