@@ -339,24 +339,70 @@ Add the checklist at the very end of the note (after Section 2). Populate it as 
 
 Save a separate `[Company Name] - Products.md` file in the same folder as the main analysis note.
 
-**Purpose:** Summarise all company products grouped by category so the investor can quickly understand what the company sells.
+**Purpose:** Give the investor a complete product-level revenue picture — what the company sells, how big each product category is, and what's still pre-revenue.
 
 **File naming:** `[Company Name] - Products.md` (same folder as the main note)
 
-**Structure:**
-- Top-level `##` heading per business segment (e.g. `## 🌐 Google Services`, `## ☁️ Google Cloud`, `## 🚀 Other Bets`) — always include a fitting emoji
-- Sub-section `###` heading per product category within a segment (e.g. `### 🔍 Search & Discovery`) — always include a fitting emoji
-- Each sub-section is a two-column markdown table: `| Product | Description |`
+**Structure — three parts:**
+
+#### Part 1: Revenue Overview (top of page)
+
+Start with `## Revenue Overview (FY[YEAR] - total revenue)` containing:
+
+1. **Doughnut chart** showing all revenue-generating product categories. Use Obsidian Charts plugin:
+
+```
+chart
+type: doughnut
+labels: [Category 1, Category 2, ...]
+series:
+  - title: Est. Revenue
+    data: [value1, value2, ...]
+    backgroundColor:
+      - rgba(37, 99, 235, 0.85)
+      - rgba(59, 130, 246, 0.85)
+      - ... (one color per slice)
+width: 70%
+```
+
+2. **Summary table** immediately below the chart:
+
+```
+| # | Category | Est. Revenue | % of Total | YoY Growth | Segment |
+```
+
+Rules for building categories:
+- Aim for 6-10 categories that cover all revenue. Too few (3 segments) is too broad; too many (20+ products) makes the chart unreadable.
+- Break large segments into meaningful sub-categories where data supports it (e.g. split "IT Services" into "DX & AI" vs "IT Outsourcing" if the annual report gives the proportion).
+- Each category must have an estimable revenue figure — use reported numbers where available, derive from reported proportions, or estimate with ⚠️ flag.
+- Add a note below the chart: *Estimates derived from annual report segment data. [explain any splits].*
+
+#### Part 2: Product Detail Tables (one section per category)
+
+Each category from the chart gets its own `##` section with the category number, emoji, name, and estimated revenue in the heading:
+
+```
+## 1. 🔧 Category Name - `~[Revenue]`
+```
+
+- One-line italic description of the category below the heading
+- Two-column table: `| Product | Description |`
+- Prefix significant revenue drivers with `⭐` and **bold**: `| ⭐ **Product Name** | ... |`
+- Add revenue figures or % where known (e.g. `` exceeded `$100M` revenue ``)
+- Significant = product that directly generates a material share of company revenue
+- Do NOT mark internal tools, platforms, or research divisions as ⭐ unless they generate standalone revenue
 - Description: one concise sentence max
-- If the company has an "Other / Ventures / Investments" arm, list those in a flat table (Company + Category + Description)
+- If the company has an "Investments / JV" category, use a three-column table: `| Company | Category | Description |`
 
-**Highlighting significant revenue drivers:**
-- Prefix the product name with `⭐` and **bold** it: `| ⭐ **Product Name** | ... |`
-- Add revenue figures or % of total revenue to the description where known (e.g. `` `~$200B`, `~50%` of total revenue ``)
-- Significant = product that directly generates a material share of company revenue (ads, subscriptions, cloud contracts, hardware sales)
-- Do NOT mark internal tools, platforms that enable other products (e.g. Android OS, Chrome browser), or research divisions as ⭐ unless they generate standalone revenue
+#### Part 3: Early-Stage / Pre-Revenue Initiatives
 
-**Source:** Use the `business_overview.md` reference file as primary source. Supplement with training knowledge for products not explicitly listed there.
+End with `## 🚀 Early-Stage / Pre-Revenue Initiatives` for products/initiatives that are launched or announced but not yet contributing meaningful revenue.
+
+- Three-column table: `| Initiative | Stage | Why It Matters |`
+- Stage examples: "Launched 2025", "First shipment 2025", "R&D phase", "Partnership formed", "Pilot phase"
+- This separates hype from revenue and keeps the doughnut chart honest.
+
+**Source:** Use the `business_overview.md` and `mda.md` reference files as primary sources. Supplement with training knowledge for products not explicitly listed there.
 
 ### Step 11: Save and confirm
 
