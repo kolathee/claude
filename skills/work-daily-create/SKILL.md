@@ -60,7 +60,7 @@ Create a **new daily note for today** under the Daily Note folder.
 
 8. **No duplicates across sections.** An item must appear in exactly one section. If it already exists anywhere in the note, update in place.
 
-9. **Create the note.** Write `YYYY-MM-DD.md` using the template. Fill **Day** with weekday. Planned Work: active tasks + Next tasks. On the Radar: passive/monitoring tasks. **Omit any section with no content** — never write empty headings. **Do NOT include End-of-Day Review or Personal Review** — added only in `e` mode.
+9. **Create the note.** Write `YYYY-MM-DD.md` using the template. Fill **Day** with weekday. Planned Work: active tasks + Next tasks. On the Radar: passive/monitoring tasks. **Omit any section that has no content** — never write an empty heading or a heading with only a bare `- ` placeholder. **Do NOT include End-of-Day Review or Personal Review** — added only in `e` mode.
 
 10. **Monday check.** If today is Monday, add as the **first item** in Planned Work:
     ```
@@ -74,7 +74,7 @@ See the shared conventions below — these apply to all daily note modes.
 
 ### Template structure
 
-Day line, then `# 📋 **Planned Work**`. Remaining H1s separated by `---`: `# ⚡ **Unplanned**` (omit if empty), `# 👀 **On the Radar**`, `# 🏠 **Personal**`. No Morning Brief. No separate Pending Requests — unplanned asks go into Unplanned.
+Day line, then `# 📋 **Planned Work**`. Remaining H1s separated by `---`: `# ⚡ **Unplanned**` (omit if empty), `# 👀 **On the Radar**` (omit if empty), `# 🏠 **Personal**` (omit if empty). No Morning Brief. No separate Pending Requests — unplanned asks go into Unplanned. **Omit any section that has no content** — never write an empty heading or a heading with only a bare `- ` placeholder.
 
 **Section order:** 1. Planned Work → 2. Unplanned → 3. On the Radar → 4. Personal
 
