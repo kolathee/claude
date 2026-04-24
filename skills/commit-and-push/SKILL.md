@@ -1,10 +1,12 @@
 ---
 name: commit-and-push
 description: >-
-  Group related changes into logical commits and push to remote.
-  Use when the user says "commit and push", "separate into commits",
-  "group changes into commits", "push changes", "commit push",
-  or asks to organize, commit, and push their working tree changes.
+  Group related changes into logical commits, push to remote, and monitor
+  the pipeline until green. Use when the user says "commit and push",
+  "separate into commits", "group changes into commits", "push changes",
+  "commit push", or asks to organize, commit, and push their working tree
+  changes. After pushing, automatically monitors the MR pipeline (delegates
+  to /monitor-pipeline) unless the user says "just push" or no MR exists.
 ---
 
 # Commit and Push
@@ -123,6 +125,24 @@ git push
 ### Step 7: Verify
 
 Run `git status` and `git log --oneline -<N>` (where N = number of new commits) to confirm everything is clean and pushed.
+
+### Step 8: Monitor Pipeline
+
+After a successful push, delegate to `/monitor-pipeline` to watch the
+CI pipeline until it reaches a terminal state (green or failed-with-fix).
+
+1. Locate the MR for the current branch (check `git branch -vv` for the
+   remote, then use `git remote get-url origin` to derive the project).
+   If there is no MR yet (e.g., `git push -u` was the first push),
+   skip this step — there is nothing to monitor.
+2. Follow `/monitor-pipeline` from its Step 1 onward: identify the
+   pipeline, poll jobs, diagnose failures, fix or retry, and repeat
+   until the pipeline is green.
+3. Report the final pipeline URL and status to the user.
+
+**Skip conditions** — do not monitor if:
+- The user explicitly says "just push" / "push only" / "don't monitor"
+- There is no remote MR or pipeline trigger configured for the branch
 
 ## Notes
 
