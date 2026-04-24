@@ -25,7 +25,7 @@ The user provides:
    with open(path, "r", encoding="utf-8") as f:
        existing = f.read()
    with open(path, "w", encoding="utf-8") as f:
-       f.write(card_content + "\n\n---\n\n\n" + existing)
+       f.write(card_content + "\n\n---\n\n" + existing)
    ```
 4. Confirm with: `Added "[word]" to your flashcards.`
 
