@@ -95,18 +95,13 @@ For each logical group, stage and commit sequentially:
 ```bash
 git add <file1> <file2> ...
 
-git commit -m "$(cat <<'EOF'
-Short summary line
-
-Optional longer explanation of why, not what.
-EOF
-)"
+git commit -m "Short summary line"
 ```
 
 **Commit message rules:**
 - Follow the repo's existing commit style (check `git log`)
-- First line: concise summary (imperative mood)
-- Body (optional): explain *why*, not *what*
+- **Title only** — do NOT add a description body
+- Concise summary in imperative mood
 - No comments, no emojis unless the repo uses them
 
 ### Step 6: Push
