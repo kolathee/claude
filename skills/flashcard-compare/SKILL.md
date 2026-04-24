@@ -74,4 +74,4 @@ Use this exact structure. The card title uses the group name or shared concept.
 - Quick decision rule should be opinionated — tell the user what to actually do, not just describe
 - Memory hooks: only include if genuinely useful (etymology, visual association, contrast trick). Skip filler.
 - After saving, explain the group conversationally to the user — use plain language, not card format
-- **Use emojis freely** in the inline explanation to make it more engaging and easier to read — e.g. 💡 for key insight, ⚠️ for traps/warnings, 🎯 for the main point, 📊 for data/formal context, 🗣️ for casual usage. Match emoji to content naturally.
+- **Use emojis inline throughout the card body AND the inline explanation** — woven into descriptions, not just as section headers. Match emoji to the context: 🔬 medical/research, 📊 data/statistics, ⚖️ legal, 🗣️ casual speech, 🎓 academic/formal, 💬 everyday, 🎯 purpose/focus, 🔗 direct connection, ⚠️ warning/trap, ✅ safe default, 💡 key insight, 🔄 mutual/together. Place emoji right before or after the relevant word or phrase for maximum clarity.

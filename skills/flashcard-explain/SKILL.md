@@ -70,4 +70,4 @@ Use this exact structure — blank line before and after each card:
 - Keep the definition focused on practical meaning, not textbook definitions
 - Patterns should reflect real usage — pick the most common ones
 - Tone section should help the user know when/where they'd actually use this word
-- **When explaining to the user after saving:** use emojis freely to make the explanation more engaging and easier to read — e.g. 💡 for key insight, ⚠️ for traps/warnings, 🎯 for the main point, 🗣️ for usage context. Match emoji to content naturally.
+- **Use emojis inline throughout the card body** — not just as section headers but woven into descriptions. Match emoji to the context being described, e.g.: 🔬 medical/research, 📊 data/statistics, ⚖️ legal, 🗣️ casual speech, 🎓 academic/formal, 💬 everyday, 🎯 purpose/focus, 🔗 direct connection, ⚠️ warning/trap, ✅ safe default, 💡 key insight. Place emoji right before or after the relevant word or phrase, not just at line starts.
