@@ -16,7 +16,7 @@ The user provides:
 
 ## Steps
 
-1. Identify the word's part of speech
+1. Identify the word's part of speech — if the word can function as multiple parts of speech (e.g. both noun and verb), list all of them in the title
 2. Generate the full card content using the template below
 3. Insert the card at the **top** of `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/CupOb/Eng FlashCard/Learning Vocab.md` using Python:
    ```python
