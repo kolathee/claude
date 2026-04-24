@@ -139,7 +139,18 @@ Follow the output template in `references/template.md`. Key principles:
 | Cyan | `hltr-cyan` | Connections and flows between concepts |
 | Grey | `hltr-grey` | Supplementary / secondary notes, caveats |
 
-Use bold (`**term**`) for strong emphasis. Use *italics* for qualifiers, nuance, side notes, and "as opposed to..." distinctions. Use `<u>underline</u>` for counter-intuitive points or things that are easy to overlook.
+### Emphasis Conventions
+
+Use formatting to create a visual hierarchy — not everywhere, just where it genuinely helps the reader spot what matters. Scarcity is what makes emphasis effective.
+
+| Use | For |
+|-----|-----|
+| **Bold** | Key terms being defined, critical rules, and conclusions the reader must not miss |
+| `backtick` | Key values, thresholds, syntax tokens, and short code references inline (e.g. `O(n log n)`, `useState`, `==`) — renders with a highlighted background in Obsidian |
+| *Italic* | Qualifiers, nuance, side notes, and "as opposed to..." distinctions |
+| <u>Underline</u> | Counter-intuitive points and things easy to overlook or misread |
+
+Do NOT over-format. Aim for backticks on every key term/value, bold on 1-3 conclusions per section, italics for nuance only.
 
 **Worth mentioning but verbose** — details, edge cases, and extended examples that are valuable but would break the concise flow of the main section belong in a **"More Detail"** section below the main content (before the quiz). This is separate from "Dive Deeper" (which is for entirely optional advanced content). Use "More Detail" for things like:
 - A concept that needs a longer code example to fully illustrate
@@ -277,8 +288,10 @@ Before saving, verify:
 - [ ] Quiz has at least one of each type: concept check, apply-it, compare/contrast, gotcha, predict output
 - [ ] Emojis in page title and `##` section headers; inline on key bold sub-items — not on every bullet
 - [ ] Highlightr marks used selectively across the full palette: yellow (terms), blue (key insight), orange (formulas), green (labels), red (warnings), purple (ratios/metrics), pink (examples), cyan (connections), grey (secondary notes)
+- [ ] `backtick` used for key values, thresholds, syntax tokens, and inline code references
 - [ ] *Italics* used for qualifiers, nuance, side notes, and "as opposed to..." distinctions
 - [ ] <u>Underline</u> used for counter-intuitive points or things easy to overlook
+- [ ] **Bold** used for key terms being defined and critical conclusions — not overused
 
 ---
 
