@@ -106,6 +106,15 @@ git commit -m "Short summary line"
 - Concise summary in imperative mood
 - No comments, no emojis unless the repo uses them
 
+**CRITICAL — Strip "Made-with: Cursor" trailer:**
+After every `git commit`, immediately verify the commit message does NOT
+contain a `Made-with: Cursor` trailer (Cursor IDE injects it automatically).
+Run `git log -1 --format='%B'` after committing. If the trailer is present,
+amend it away before pushing:
+```bash
+git commit --amend -m "$(git log -1 --format='%s')"
+```
+
 ### Step 6: Push
 
 ```bash
