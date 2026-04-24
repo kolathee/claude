@@ -67,12 +67,27 @@ Before writing, judge whether the topic fits a single 5-minute page:
 
 For broad topics: create a main index page first, then create each sub-page and link them using Obsidian wikilinks: `[[Sub-Page Title]]`.
 
+**File naming for broad topics:** Use numeric prefixes so Obsidian's file explorer sorts them in order when sorted by filename (A→Z):
+
+```
+Topic/00 - Topic - Overview.md      ← always 00 so it sorts to top
+Topic/01 - Sub-Topic A.md
+Topic/02 - Sub-Topic B.md
+Topic/03 - Sub-Topic C.md
+```
+
+Wikilinks must use the pipe syntax to keep display names clean:
+```
+[[00 - Topic - Overview|Topic - Overview]]
+[[01 - Sub-Topic A|Sub-Topic A]]
+```
+
 **Sub-pages can have their own sub-pages** when a sub-topic is itself broad enough to exceed the 5-minute rule AND its overflow content is conceptually distinct (not just "more of the same"). Maximum nesting depth: **2 levels** (index → sub-page → sub-sub-page). Never go deeper.
 
 ```
-Level 0:  Topic/Topic - Overview.md
-Level 1:  Topic/Sub-Topic.md           (or Topic/Sub-Topic/Sub-Topic - Overview.md if it splits further)
-Level 2:  Topic/Sub-Topic/Detail.md    (deepest allowed)
+Level 0:  Topic/00 - Topic - Overview.md
+Level 1:  Topic/01 - Sub-Topic.md      (or Topic/Sub-Topic/00 - Sub-Topic - Overview.md if it splits further)
+Level 2:  Topic/Sub-Topic/01 - Detail.md    (deepest allowed)
 ```
 
 When a sub-page needs to split: convert it into its own folder with an Overview page, then add the detail pages inside that folder.
