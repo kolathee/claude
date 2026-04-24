@@ -107,13 +107,24 @@ git commit -m "Short summary line"
 - No comments, no emojis unless the repo uses them
 
 **CRITICAL — Strip "Made-with: Cursor" trailer:**
-After every `git commit`, immediately verify the commit message does NOT
-contain a `Made-with: Cursor` trailer (Cursor IDE injects it automatically).
-Run `git log -1 --format='%B'` after committing. If the trailer is present,
-amend it away before pushing:
+Cursor IDE injects a `Made-with: Cursor` trailer into every `git commit`
+run through its shell — even `git commit --amend`. The ONLY reliable way
+to remove it is to rewrite the commit using git plumbing after committing:
 ```bash
-git commit --amend -m "$(git log -1 --format='%s')"
+TREE=$(git log -1 --format='%T')
+PARENT=$(git log -1 --format='%P')
+MSG=$(git log -1 --format='%s')
+NEW=$(echo "$MSG" | \
+  GIT_AUTHOR_NAME="$(git log -1 --format='%an')" \
+  GIT_AUTHOR_EMAIL="$(git log -1 --format='%ae')" \
+  GIT_AUTHOR_DATE="$(git log -1 --format='%aD')" \
+  GIT_COMMITTER_NAME="$(git log -1 --format='%cn')" \
+  GIT_COMMITTER_EMAIL="$(git log -1 --format='%ce')" \
+  GIT_COMMITTER_DATE="$(git log -1 --format='%cD')" \
+  git commit-tree "$TREE" -p "$PARENT")
+git update-ref HEAD "$NEW"
 ```
+Always run `git log -1 --format='%B'` after to confirm the trailer is gone.
 
 ### Step 6: Push
 
