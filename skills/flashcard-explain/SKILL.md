@@ -40,23 +40,23 @@ Use this exact structure — blank line before and after each card:
 ?
 **Meaning:** [definition. Use <mark class="hltr-blue">blue highlight</mark> for the core concept.]
 ───────────────────
-#### In your sentence
+**In your sentence**
 *"[sentence with <mark class="hltr-yellow">word highlighted in yellow</mark>]"*
 → [explain meaning in context, *italics* for nuance]
 → [one more implication if useful]
 ───────────────────
-#### Common patterns
+**Common patterns**
 <mark class="hltr-orange">word + preposition</mark> + noun → *"example sentence"*
 <mark class="hltr-orange">word + structure</mark> → *"example sentence"*
 [2-3 most useful real-world patterns, no bullet prefix]
 ───────────────────
-#### Alternatives
+**Alternatives**
 **simplest** · *simpler, [nuance]* · "example sentence"
 **another** · *simpler/neutral, [nuance]* · "example sentence"
 **formal option** · *more formal, [nuance]* · "example sentence"
 **lookalike** → ~~not the same~~ — brief explanation
 ───────────────────
-#### Tone & register
+**Tone & register**
 <mark class="hltr-green">tone label</mark> — [where it's commonly used]
 → [what it implies or signals]
 → [origin or memorable note if useful]
