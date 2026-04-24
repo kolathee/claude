@@ -343,11 +343,43 @@ Save a separate `[Company Name] - Products.md` file in the same folder as the ma
 
 **File naming:** `[Company Name] - Products.md` (same folder as the main note)
 
-**Structure — three parts:**
+**Structure — four parts:**
 
-#### Part 1: Revenue Overview (top of page)
+#### Part 1: Major Revenue Streams (top of page)
 
-Start with `## Revenue Overview (FY[YEAR] - total revenue)` containing:
+Start with `## Major Revenue Streams (FY[YEAR] - total revenue)` — a high-level doughnut showing **3-5 broad segments** (e.g. Technology / Telecom / Education / Other). Purpose: give the investor a fast read on the broader business mix before the detailed breakdown.
+
+1. **Doughnut chart** with 3-5 broad segments:
+
+```
+chart
+type: doughnut
+labels: [Broad Segment 1, Broad Segment 2, ...]
+series:
+  - title: Est. Revenue
+    data: [value1, value2, ...]
+    backgroundColor:
+      - rgba(37, 99, 235, 0.85)
+      - rgba(16, 185, 129, 0.85)
+      - rgba(251, 146, 60, 0.85)
+      - rgba(156, 163, 175, 0.85)
+width: 70%
+```
+
+2. **Summary table** immediately below:
+
+```
+| # | Segment | Est. Revenue | % of Total |
+```
+
+Rules for broad segments:
+- Target 3-5 segments — one-glance readability.
+- Group the detailed categories from Part 2 into the broad segments the company itself uses for reporting (e.g. FPT's three blocks: Technology / Telecom / Education; a bank's: NII / Fee / Wealth / Other).
+- Revenue values should equal the sum of the detailed categories they group.
+
+#### Part 2: Revenue Overview - Detailed (below Major Revenue Streams)
+
+Use heading `## Revenue Overview - Detailed (FY[YEAR] - total revenue)` containing:
 
 1. **Doughnut chart** showing all revenue-generating product categories. Use Obsidian Charts plugin:
 
@@ -377,7 +409,7 @@ Rules for building categories:
 - Each category must have an estimable revenue figure — use reported numbers where available, derive from reported proportions, or estimate with ⚠️ flag.
 - Add a note below the chart: *Estimates derived from annual report segment data. [explain any splits].*
 
-#### Part 2: Product Detail Tables (one section per category)
+#### Part 3: Product Detail Tables (one section per category)
 
 Each category from the chart gets its own `##` section with the category number, emoji, name, and estimated revenue in the heading:
 
@@ -394,7 +426,7 @@ Each category from the chart gets its own `##` section with the category number,
 - Description: one concise sentence max
 - If the company has an "Investments / JV" category, use a three-column table: `| Company | Category | Description |`
 
-#### Part 3: Early-Stage / Pre-Revenue Initiatives
+#### Part 4: Early-Stage / Pre-Revenue Initiatives
 
 End with `## 🚀 Early-Stage / Pre-Revenue Initiatives` for products/initiatives that are launched or announced but not yet contributing meaningful revenue.
 
