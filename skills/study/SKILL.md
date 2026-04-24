@@ -217,23 +217,28 @@ Mix question types to test different levels of understanding:
 - **Predict output** — Show a code snippet, ask what it prints/returns — great for coercion, async order, scope
 - **Design choice** — "When would you choose X over Y?" — tests judgment, not just recall
 
-Format as a collapsible spoiler so the user can attempt before seeing the answer:
+Format as a collapsible callout so the user can attempt before seeing the answer. Use `> [!note]-` (the `-` makes it start collapsed):
 
 ```markdown
 ## Quick Quiz
 
 **1. [Question]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer — keep it concise but complete. Include a code example if it helps.]
-
-</details>
+> [!note]- Answer
+> [Answer — keep it concise but complete.]
+>
+> ```python
+> # code example if needed — blank line before fence required
+> ```
 
 **2. [Question]**
 ...
 ```
+
+**Important formatting rules inside callouts:**
+- Every line of callout content must start with `> `
+- Add a blank `>` line before any fenced code block inside a callout (required for correct rendering)
+- Code blocks inside callouts need a language tag (e.g. ` ```python `, not bare ` ``` `)
 
 For multi-page topics, include a full quiz on each sub-page covering that page's content. The overview/index page quiz should span all sub-topics.
 

@@ -68,39 +68,27 @@ flowchart LR
 
 **1. [Concept check question]**
 
-<details>
-<summary>Answer</summary>
-
-[Concise answer. Add a code snippet if it helps.]
-
-</details>
+> [!note]- Answer
+> [Concise answer. Add a code snippet if it helps.]
+>
+> ```python
+> # code if needed — blank line before fence required
+> ```
 
 **2. [Apply-it question — "what happens when..."]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer]
-
-</details>
+> [!note]- Answer
+> [Answer]
 
 **3. [Compare/contrast question]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer]
-
-</details>
+> [!note]- Answer
+> [Answer]
 
 **4. [Gotcha / common mistake question]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer]
-
-</details>
+> [!note]- Answer
+> [Answer]
 
 ---
 
@@ -162,21 +150,13 @@ graph TD
 
 **1. [Broad overview question spanning multiple sub-topics]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer]
-
-</details>
+> [!note]- Answer
+> [Answer]
 
 **2. [Another overview question]**
 
-<details>
-<summary>Answer</summary>
-
-[Answer]
-
-</details>
+> [!note]- Answer
+> [Answer]
 ```
 
 ---
