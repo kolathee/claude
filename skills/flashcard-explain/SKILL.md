@@ -70,3 +70,4 @@ Use this exact structure — blank line before and after each card:
 - Keep the definition focused on practical meaning, not textbook definitions
 - Patterns should reflect real usage — pick the most common ones
 - Tone section should help the user know when/where they'd actually use this word
+- **When explaining to the user after saving:** use emojis freely to make the explanation more engaging and easier to read — e.g. 💡 for key insight, ⚠️ for traps/warnings, 🎯 for the main point, 🗣️ for usage context. Match emoji to content naturally.
