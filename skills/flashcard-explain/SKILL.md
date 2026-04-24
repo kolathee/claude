@@ -36,6 +36,7 @@ Use this exact structure — blank line before and after each card:
 ```
 ## [word] ([part of speech])
 *"[context sentence with <mark class="hltr-yellow">word highlighted in yellow</mark>]"*
+[If image provided: **Context:** 1-2 sentences describing the scene — what it shows, key details, why this word appeared there. Pure scene description only, no word explanation.]
 ?
 **Meaning:** [definition. Use <mark class="hltr-blue">blue highlight</mark> for the core concept.]
 ───────────────────
@@ -65,7 +66,7 @@ Use this exact structure — blank line before and after each card:
 
 ## Notes
 
-- If the user provides an image, describe what's shown before generating the card
+- If the user provides an image, include a **Context** line between the sentence and `?` — 1-2 sentences describing the scene (what it shows, key details). Pure scene description only, no explanation of the word itself.
 - Keep the definition focused on practical meaning, not textbook definitions
 - Patterns should reflect real usage — pick the most common ones
 - Tone section should help the user know when/where they'd actually use this word
