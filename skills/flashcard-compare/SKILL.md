@@ -41,25 +41,25 @@ Use this exact structure. The card title uses the group name or shared concept.
 ?
 **Shared meaning:** <mark class="hltr-blue">[one sentence — what they all mean]</mark>
 ───────────────────
-#### The spectrum
+**The spectrum**
 [arrange words from weakest/most neutral → strongest/most marked, or informal → formal]
 <mark class="hltr-yellow">word1</mark> — [one-line distinction] · *"example sentence"*
 <mark class="hltr-yellow">word2</mark> — [one-line distinction] · *"example sentence"*
 <mark class="hltr-yellow">word3</mark> — [one-line distinction] · *"example sentence"*
 [continue for all words]
 ───────────────────
-#### Quick decision rule
+**Quick decision rule**
 → Default pick: **[word]** — [when to use it, why it's safe]
 → Use **[word]** when [specific situation]
 → Use **[word]** when [specific situation]
 → Avoid **[word]** when [common mistake or trap]
 ───────────────────
-#### Memory hooks
+**Memory hooks**
 <mark class="hltr-orange">word1</mark> → [memorable association, etymology, or trick]
 <mark class="hltr-orange">word2</mark> → [memorable association, etymology, or trick]
 [only include if genuinely useful — skip weak ones]
 ───────────────────
-#### Tone & register
+**Tone & register**
 <mark class="hltr-green">most formal</mark>: [word(s)]
 <mark class="hltr-green">neutral / everyday</mark>: [word(s)]
 <mark class="hltr-green">casual / colloquial</mark>: [word(s)]
